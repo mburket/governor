@@ -6,11 +6,11 @@ etcd:
 postgresql:
   name: postgresql0
   listen: 0.0.0.0:5432
-  data_dir: data/postgresql0
+  data_dir: /pg_cluster/pgsql/9.4/data
   replication:
     username: replicator
     password: rep-pass
-    network:  10.0.0.0/16
+    network: 10.0.0.0/16
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:
