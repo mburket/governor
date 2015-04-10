@@ -5,12 +5,12 @@ etcd:
   host: 127.0.0.1:4001
 postgresql:
   name: postgresql1
-  listen: 127.0.0.1:5433
+  listen: 0.0.0.0:5432
   data_dir: data/postgresql1
   replication:
     username: replicator
     password: rep-pass
-    network: 127.0.0.1/32
+    network: 10.0.0.0/24
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:
