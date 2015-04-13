@@ -27,6 +27,7 @@ class Postgresql:
             self.conn = psycopg2.connect("postgres://%s:%s/postgres" % ('postgres', 'SecurePassword', self.host, self.port))
             self.conn.autocommit = True
             self.cursor_holder = self.conn.cursor()
+            print self.cursor_holder
 
         return self.cursor_holder
 
