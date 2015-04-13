@@ -16,7 +16,7 @@ postgresql:
   parameters:
     archive_mode: "on"
     wal_level: hot_standby
-    archive_command: mkdir -p ../wal_archive && cp %p ../wal_archive/%f
+    archive_command: mkdir -p /pg_cluster/pgsql/9.4/data/wal_archive && cp %p /pg_cluster/pgsql/9.4/data/wal_archive/%f
     max_wal_senders: 5
     wal_keep_segments: 8
     archive_timeout: 1800s
