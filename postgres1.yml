@@ -11,6 +11,9 @@ postgresql:
     username: replicator
     password: rep-pass
     network: 10.0.0.0/16
+  psql:
+    username: postgres
+    password: SecurePassword
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:
