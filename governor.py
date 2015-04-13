@@ -27,9 +27,12 @@ atexit.register(stop_postgresql)
 etcd_ready = False
 while not etcd_ready:
     try:
+        print postgresql.name
+        print postgresql.connection_string
         etcd.touch_member(postgresql.name, postgresql.connection_string)
         etcd_ready = True
     except urllib2.URLError:
+        print str(urllib2.URLError)
         logging.info("waiting on etcd")
         time.sleep(5)
 

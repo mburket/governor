@@ -17,7 +17,6 @@ class Etcd:
 
         while True:
             try:
-                print path
                 response = urllib2.urlopen(self.client_url(path)).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
