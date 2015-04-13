@@ -92,7 +92,9 @@ class Postgresql:
             os.remove(pid_path)
             logger.info("Removed %s" % pid_path)
 
-        command_code = os.system("postgres -D %s %s &" % (self.data_dir, self.server_options()))
+        cmd = "postgres -D %s %s &" % (self.data_dir, self.server_options())
+        print cmd
+        command_code = os.system(cmd)
         time.sleep(5)
         return command_code != 0
 
