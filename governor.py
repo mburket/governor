@@ -32,7 +32,7 @@ while not etcd_ready:
         etcd.touch_member(postgresql.name, postgresql.connection_string)
         etcd_ready = True
     except urllib2.URLError:
-        print str(urllib2.URLError)
+        print str(urllib2.URLError.reason)
         logging.info("waiting on etcd")
         time.sleep(5)
 
