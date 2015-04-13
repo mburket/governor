@@ -33,6 +33,8 @@ class Etcd:
 
     def put_client_path(self, path, data):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
+        print path
+        print data
         request = urllib2.Request(self.client_url(path), data=urlencode(data).replace("false", "False"))
         request.get_method = lambda: 'PUT'
         opener.open(request)
