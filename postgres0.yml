@@ -26,6 +26,6 @@ postgresql:
     max_replication_slots: 5
     hot_standby: "on"
     ssl: "on"
-    ssl_ciphers: "HIGH:!aNULL:!MD5"
+    # ssl_ciphers: "HIGH:!aNULL:!MD5"
     ssl_cert_file: "/etc/pki/tls/certs/star_myaccolade_com.crt"
     ssl_key_file: "/etc/pki/tls/private/star_myaccolade_com.key"
