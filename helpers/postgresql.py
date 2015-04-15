@@ -12,8 +12,6 @@ class Postgresql:
     def __init__(self, config):
         self.name = config["name"]
         self.host, self.port = config["listen"].split(":")
-        if self.host == '0.0.0.0':
-            self.host = '127.0.0.1'
         self.data_dir = config["data_dir"]
         self.replication = config["replication"]
         self.psql = config["psql"]
