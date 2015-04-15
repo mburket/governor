@@ -57,7 +57,7 @@ class Postgresql:
         return not os.path.exists(self.data_dir) or os.listdir(self.data_dir) == []
 
     def initialize(self):
-        if os.system("initdb -D %s" % self.data_dir) == 0:
+        if os.system("initdb -D %s -U postgres -W" % self.data_dir) == 0:
             self.write_pg_hba()
 
             return True
