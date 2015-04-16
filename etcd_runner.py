@@ -3,7 +3,7 @@
 import local_lib
 from helpers.etcd import Etcd
 import time
-import os
+import subprocess
 
 # vars
 base = "https://discovery.etcd.io/"
@@ -16,9 +16,16 @@ config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
 etcd = Etcd(config)
 
 # main
-cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "&" ]
+cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500" ]
 print cmd
-out = os.spawnlp(os.P_NOWAIT, cmd, '/tmp/etcd.log')
+try:
+	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	out, err = p.communicate()
+	if len(err) > 0:
+        raise Exception(err)
+except Exception, e:
+	raise e
+
 print out
 
 while True:
@@ -28,5 +35,5 @@ while True:
 		print "update leader key"		
 	except Exception, e:
 		pass
-		
+
 	time.sleep(30)		
