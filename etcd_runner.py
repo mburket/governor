@@ -17,19 +17,20 @@ etcd = Etcd(config)
 host = ip + ":4001"
 
 # main
+# run etcd
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500" ]
-print cmd
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 except Exception, e:
 	raise e
 
+# update leader key
 while True:
 	try:
 		# update the etcd leader key
 		etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
 		print "i am etcd leader. updated leader key."
 	except Exception, e:
-		pass
+		print "i am etcd follower. following leader."
 
 	time.sleep(30)		
