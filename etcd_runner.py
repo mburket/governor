@@ -3,7 +3,7 @@
 import local_lib
 from helpers.etcd import Etcd
 import time
-from os import spawnlp
+import os
 
 # vars
 base = "https://discovery.etcd.io/"
@@ -18,7 +18,7 @@ etcd = Etcd(config)
 # main
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500" ]
 print cmd
-spawnlp(os.P_DETACH, cmd, '/tmp/etcd.log')
+os.spawnlp(os.P_DETACH, cmd, '/tmp/etcd.log')
 
 try:
 	# update the etcd leader key
