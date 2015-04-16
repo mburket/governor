@@ -14,6 +14,7 @@ class Etcd:
             if not host == None:
                 self.scope = host
         except Exception, e:
+            print str(e)
             self.host = config["host"]
         
         self.ttl = config["ttl"]
