@@ -8,17 +8,12 @@ logger = logging.getLogger(__name__)
 class Etcd:
     def __init__(self, config):
         self.scope = config["scope"]
-        self.host = config["host"]
-        try:
-            host = self.get_client_path("/etcd_leader")["node"]["value"]
-            print host
-            if not host == None:
-                self.scope = host
-        except Exception, e:
-            print str(e)
-            self.host = config["host"]
-        
         self.ttl = config["ttl"]
+        try:
+            url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
+            self.host = urllib2.urlopen(url).read()["node"]["value"]
+        except Exception, e:
+            self.host = config["host"]
 
     def get_client_path(self, path, max_attempts=1):
         attempts = 0
