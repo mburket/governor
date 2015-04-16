@@ -19,7 +19,7 @@ class Etcd:
             self.host = config["host"]
 
     def get_client_path(self, path, max_attempts=1):
-        attempts = 0
+        attempts = 10
         response = None
 
         while True:
