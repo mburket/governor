@@ -28,7 +28,7 @@ while True:
 	try:
 		# update the etcd leader key
 		etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
-		print "update leader key"		
+		print "i am etcd leader. updated leader key."
 	except Exception, e:
 		pass
 
