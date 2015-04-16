@@ -10,6 +10,7 @@ class Etcd:
         self.scope = config["scope"]
         try:
             host = self.get_client_path("/etcd_leader")["node"]["value"]
+            print host
             if not host == None:
                 self.scope = host
         except Exception, e:
