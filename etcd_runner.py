@@ -25,6 +25,7 @@ call(cmd)
 try:
 	# update the etcd leader key
 	etcd.put_client_path("/etcd_leader", { "host": ip, "ttl": config["ttl"] })
+	print "update leader key"
 	time.sleep(30)
 except Exception, e:
 	pass
