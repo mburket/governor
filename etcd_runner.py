@@ -31,6 +31,6 @@ while True:
 		etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
 		print "i am etcd leader. updated leader key."
 	except Exception, e:
-		print "i am etcd follower. following leader."
+		print "i am etcd follower."
 
 	time.sleep(30)		
