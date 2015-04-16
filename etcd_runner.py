@@ -10,7 +10,7 @@ from subprocess import call
 
 # vars
 base = "https://discovery.etcd.io/"
-etcd_cluster = "f71aca0ff87c3e7f9dcd9838266b7631"
+etcd_cluster = "168ae83577546eb25f2f9c117511730a"
 discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = local_lib.ec2_ip()
