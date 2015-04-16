@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 
-# import sys, os, yaml, time, urllib2, atexit
-# import logging
-
 import local_lib
 from helpers.etcd import Etcd
 import time
-from subprocess import call
+from os import spawnlp
 
 # vars
 base = "https://discovery.etcd.io/"
@@ -19,9 +16,10 @@ config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
 etcd = Etcd(config)
 
 # main
-cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "&" ]
+cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500" ]
 print cmd
-call(cmd)
+spawnlp(os.P_DETACH, cmd, '/tmp/etcd.log')
+
 try:
 	# update the etcd leader key
 	etcd.put_client_path("/etcd_leader", { "host": ip, "ttl": config["ttl"] })
