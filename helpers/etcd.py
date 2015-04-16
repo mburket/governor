@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class Etcd:
     def __init__(self, config):
         self.scope = config["scope"]
+        self.host = config["host"]
         try:
             host = self.get_client_path("/etcd_leader")["node"]["value"]
             print host
