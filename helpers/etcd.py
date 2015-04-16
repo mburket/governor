@@ -12,7 +12,7 @@ class Etcd:
         try:
             url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
             print url
-            res = urllib2.urlopen(url).read()
+            res = json.loads(urllib2.urlopen(url).read())
             print res
             self.host = res["node"]["value"]
         except Exception, e:
