@@ -15,7 +15,7 @@ etcd_name = local_lib.ec2_name()
 #print etcd_ip
 
 # test that etcd exists
-cmd = "/bin/etcd -bind-addr=0.0.0.0:4001 -addr=" + etcd_ip + ":4001 -discovery=" + discovery + " -name=" + etcd_name
+cmd = "/bin/etcd -bind-addr=0.0.0.0:4001 -addr=" + etcd_ip + ":4001 -discovery=" + discovery + " -name=" + etcd_name + " -peer-addr=" + etcd_ip + ":7001 -peer-bind-addr=0.0.0.0:7001 -peer-heartbeat-interval=100 -peer-election-timeout=500"
 print cmd
 try:
 	pass
