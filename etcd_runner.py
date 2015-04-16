@@ -18,7 +18,7 @@ etcd = Etcd(config)
 # main
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500" ]
 print cmd
-os.spawnlp(os.P_DETACH, cmd, '/tmp/etcd.log')
+os.spawnlp(os.P_NOWAIT, cmd, '/tmp/etcd.log')
 
 try:
 	# update the etcd leader key
