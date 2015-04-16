@@ -11,7 +11,7 @@ import local_lib
 discovery = "https://discovery.etcd.io/f71aca0ff87c3e7f9dcd9838266b7631"
 data_dir = "/var/lib/etcd/default.etcd/"
 etcd_ip = local_lib.ec2_ip()
-etcd_name = ocal_lib.ec2_name()
+etcd_name = local_lib.ec2_name()
 #print etcd_ip
 
 # test that etcd exists
