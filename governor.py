@@ -7,6 +7,7 @@ from helpers.etcd import Etcd
 from helpers.postgresql import Postgresql
 from helpers.ha import Ha
 
+import local_lib
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
@@ -14,8 +15,11 @@ f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
 
-etcd = Etcd(config["etcd"])
+config["postgresql"]["listen"] = local_lib.ec2_ip()
+config["postgresql"]["name"] = local_lib.ec2_name()
 postgresql = Postgresql(config["postgresql"])
+
+etcd = Etcd(config["etcd"])
 ha = Ha(postgresql, etcd)
 
 # stop postgresql on script exit
