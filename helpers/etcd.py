@@ -33,9 +33,9 @@ class Etcd:
                 if attempts < max_attempts:
                     time.sleep(3)
                 else:           
-                    raise e
+                    self.host = config["host"]
 
-    def get_client_path(self, path, max_attempts=10):
+    def get_client_path(self, path, max_attempts=3):
         attempts = 0
         response = None
 
