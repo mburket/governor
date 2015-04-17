@@ -16,7 +16,7 @@ config = yaml.load(f.read())
 f.close()
 
 # configure the postgres
-config["postgresql"]["listen"] = local_lib.ec2_ip() + ":" + config["postgresql"]["port"]
+config["postgresql"]["listen"] = local_lib.ec2_ip() + ":" + str(config["postgresql"]["port"])
 config["postgresql"]["name"] = local_lib.ec2_name()
 postgresql = Postgresql(config["postgresql"])
 
