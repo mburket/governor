@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import local_lib
-#from helpers.etcd import Etcd
 import time
 import subprocess
+import urllib2
 
 # vars
 base = "https://discovery.etcd.io/"
@@ -13,7 +13,6 @@ data_dir = "/var/lib/etcd/default.etcd/"
 ip = local_lib.ec2_ip()
 hostname = local_lib.ec2_name()
 config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
-#etcd = Etcd(config)
 host = ip + ":4001"
 
 # main
@@ -39,7 +38,7 @@ while True:
 		request.get_method = lambda: 'PUT'
 		opener.open(request)			
 		print "i am etcd leader. updated leader key."
-	except Exception, e:
+	except (urllib2.HTTPError, urllib2.URLError) as e:
 		print "i am etcd follower."	
 
 	time.sleep(30)		
