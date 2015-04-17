@@ -11,9 +11,7 @@ class Etcd:
         self.ttl = config["ttl"]
         try:
             url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
-            print url
             res = json.loads(urllib2.urlopen(url).read())
-            print res
             self.host = res["node"]["value"]
         except Exception, e:
             self.host = config["host"]
