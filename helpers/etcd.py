@@ -43,10 +43,10 @@ class Etcd:
             try:
                 response = urllib2.urlopen(self.client_url(path)).read()
                 break
-            except (urllib2.HTTPError, urllib2.URLError) as e:
-                self.get_etcd_leader(self.etcd_local)
+            except (urllib2.HTTPError, urllib2.URLError) as e:                
                 attempts += 1
                 if attempts < max_attempts:
+                    self.get_etcd_leader(self.etcd_local)
                     logger.info("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
                     time.sleep(3)
                 else:
