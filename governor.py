@@ -5,7 +5,7 @@ import logging
 
 from helpers.etcd import Etcd
 from helpers.postgresql import Postgresql
-# from helpers.ha import Ha
+from helpers.ha import Ha
 
 import local_lib
 
@@ -20,7 +20,7 @@ config["postgresql"]["listen"] = local_lib.ec2_ip() + ":" + str(config["postgres
 postgresql = Postgresql(config["postgresql"])
 
 etcd = Etcd(config["etcd"])
-# ha = Ha(postgresql, etcd)
+ha = Ha(postgresql, etcd)
 
 # stop postgresql on script exit
 def stop_postgresql():
@@ -63,7 +63,7 @@ else:
     postgresql.start()
 
 while True:
-    # logging.info(ha.run_cycle())
+    logging.info(ha.run_cycle())
 
     # create replication slots
     if postgresql.is_leader():
