@@ -35,7 +35,7 @@ class Etcd:
                 else:           
                     self.host = host
 
-    def get_client_path(self, path, max_attempts=3):
+    def get_client_path(self, path, max_attempts=1):
         attempts = 0
         response = None
 
@@ -43,10 +43,10 @@ class Etcd:
             try:
                 response = urllib2.urlopen(self.client_url(path)).read()
                 break
-            except (urllib2.HTTPError, urllib2.URLError) as e:                
+            except (urllib2.HTTPError, urllib2.URLError) as e:
+                self.get_etcd_leader(self.etcd_local)              
                 attempts += 1
-                if attempts < max_attempts:
-                    self.get_etcd_leader(self.etcd_local)
+                if attempts < max_attempts:                    
                     logger.info("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
                     time.sleep(3)
                 else:
