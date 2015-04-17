@@ -16,7 +16,7 @@ class Etcd:
         except Exception, e:
             self.host = config["host"]
 
-    def get_client_path(self, path, max_attempts=1):
+    def get_client_path(self, path, max_attempts=10):
         attempts = 0
         response = None
 
