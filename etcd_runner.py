@@ -3,6 +3,7 @@
 import local_lib
 import time
 import subprocess
+import logging
 import urllib2
 from urllib import urlencode
 
