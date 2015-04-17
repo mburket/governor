@@ -1,0 +1,31 @@
+loop_wait: 10
+etcd:
+  scope: batman
+  ttl: 30
+  host: 127.0.0.1:4001
+postgresql:
+  name: databased01
+  port: 5432
+  data_dir: /pg_cluster/pgsql/9.4/data
+  replication:
+    username: replicator
+    password: rep-pass
+    network: 10.0.0.0/16
+  psql:
+    username: postgres
+    password: SecurePassword    
+  #recovery_conf:
+    #restore_command: cp ../wal_archive/%f %p
+  parameters:
+    archive_mode: "on"
+    wal_level: hot_standby
+    archive_command: mkdir -p /pg_cluster/pgsql/9.4/data/wal_archive && cp %p /pg_cluster/pgsql/9.4/data/wal_archive/%f
+    max_wal_senders: 5
+    wal_keep_segments: 8
+    archive_timeout: 1800s
+    max_replication_slots: 5
+    hot_standby: "on"
+    ssl: "on"
+    # ssl_ciphers: "HIGH:!aNULL:!MD5"
+    ssl_cert_file: "/etc/pki/tls/certs/star_myaccolade_com.crt"
+    ssl_key_file: "/etc/pki/tls/private/star_myaccolade_com.key"
