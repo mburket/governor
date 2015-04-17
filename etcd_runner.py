@@ -6,6 +6,8 @@ import subprocess
 import urllib2
 from urllib import urlencode
 
+logger = logging.getLogger(__name__)
+
 # vars
 base = "https://discovery.etcd.io/"
 etcd_cluster = "168ae83577546eb25f2f9c117511730a"
@@ -32,9 +34,9 @@ while True:
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
 		request.get_method = lambda: 'PUT'
-		opener.open(request)			
-		print "i am etcd leader. updated leader key."
+		opener.open(request)
+		logger.info("i am etcd leader. updated leader key.")
 	except (urllib2.HTTPError, urllib2.URLError) as e:
-		print "i am etcd follower."	
+		logger.info("i am etcd follower.")
 
 	time.sleep(30)		
