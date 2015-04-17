@@ -18,13 +18,13 @@ class Etcd:
         # except Exception, e:
         #     self.host = config["host"]
 
-    def get_etcd_leader(host):
+    def get_etcd_leader(self, host):
         attempts = 0
         max_attempts = 3
 
         while True:
             try:
-                url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
+                url = "http://" + host + "/v2/keys/service/batman/etcd_leader"
                 res = json.loads(urllib2.urlopen(url).read())
                 self.host = res["node"]["value"]
                 break
