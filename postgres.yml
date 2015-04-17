@@ -6,6 +6,7 @@ etcd:
 postgresql:
   # name: databased01
   # listen: 10.2.3.8:5432
+  port: 5432
   data_dir: /pg_cluster/pgsql/9.4/data
   replication:
     username: replicator
