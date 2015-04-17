@@ -3,11 +3,8 @@
 import local_lib
 import time
 import subprocess
-import logging
 import urllib2
 from urllib import urlencode
-
-logger = logging.getLogger(__name__)
 
 # vars
 base = "https://discovery.etcd.io/"
@@ -35,9 +32,9 @@ while True:
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
 		request.get_method = lambda: 'PUT'
-		opener.open(request)
-		logger.info("i am etcd leader. updated leader key.")
+		opener.open(request)			
+		print "i am etcd leader. updated leader key."
 	except (urllib2.HTTPError, urllib2.URLError) as e:
-		logger.info("i am etcd follower.")
+		print "i am etcd follower."	
 
 	time.sleep(30)		
