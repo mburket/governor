@@ -31,7 +31,7 @@ while True:
 		# etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
 		data = { "value": host, "ttl": config["ttl"] }
 		print data
-		path = "http://%s/v2/keys/service/v2/keys/service/batman/etcd_leader" (config["host"])
+		path = "http://%s/v2/keys/service/v2/keys/service/batman/etcd_leader" % (config["host"])
 		print path
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
