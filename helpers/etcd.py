@@ -9,12 +9,31 @@ class Etcd:
     def __init__(self, config):
         self.scope = config["scope"]
         self.ttl = config["ttl"]
-        try:
-            url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
-            res = json.loads(urllib2.urlopen(url).read())
-            self.host = res["node"]["value"]
-        except Exception, e:
-            self.host = config["host"]
+        self.get_etcd_leader(config["host"])
+        self.etcd_local = config["host"]
+        # try:
+        #     url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
+        #     res = json.loads(urllib2.urlopen(url).read())
+        #     self.host = res["node"]["value"]
+        # except Exception, e:
+        #     self.host = config["host"]
+
+    def get_etcd_leader(host):
+        attempts = 0
+        max_attempts = 3
+
+        while True:
+            try:
+                url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
+                res = json.loads(urllib2.urlopen(url).read())
+                self.host = res["node"]["value"]
+                break
+            except (urllib2.HTTPError, urllib2.URLError) as e:
+                attempts += 1
+                if attempts < max_attempts:
+                    time.sleep(3)
+                else:           
+                    raise e
 
     def get_client_path(self, path, max_attempts=10):
         attempts = 0
@@ -25,6 +44,7 @@ class Etcd:
                 response = urllib2.urlopen(self.client_url(path)).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
+                get_etcd_leader(self.etcd_local)
                 attempts += 1
                 if attempts < max_attempts:
                     logger.info("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
