@@ -6,10 +6,11 @@ import helpers.errors
 logger = logging.getLogger(__name__)
 
 class Etcd:
-    def __init__(self, config, max_attempts=10):
+    def __init__(self, config):
         self.scope = config["scope"]
         self.ttl = config["ttl"]
         attempts = 0
+        max_attempts = 10
 
         while True:
             try:
