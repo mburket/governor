@@ -28,9 +28,15 @@ except Exception, e:
 while True:
 	try:
 		# update the etcd leader key
-		etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
+		# etcd.put_client_path("/etcd_leader", { "value": host, "ttl": config["ttl"] })
+		data = { "value": host, "ttl": config["ttl"] }
+		path = "http://%s/v2/keys/service/v2/keys/service/batman/etcd_leader" (config["host"])
+        opener = urllib2.build_opener(urllib2.HTTPHandler)
+        request = urllib2.Request(etcd.client_url(path), data=urlencode(data).replace("false", "False"))
+        request.get_method = lambda: 'PUT'
+        opener.open(request)			
 		print "i am etcd leader. updated leader key."
 	except Exception, e:
-		print "i am etcd follower."
+		print "i am etcd follower."	
 
 	time.sleep(30)		

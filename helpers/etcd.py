@@ -24,7 +24,7 @@ class Etcd:
 
         while True:
             try:
-                url = "http://" + host + "/v2/keys/service/batman/etcd_leader"
+                url = "http://%s/v2/keys/service/batman/etcd_leader" (host)
                 res = json.loads(urllib2.urlopen(url).read())
                 self.host = res["node"]["value"]
                 break
