@@ -4,6 +4,7 @@ import local_lib
 import time
 import subprocess
 import urllib2
+from urllib import urlencode
 
 # vars
 base = "https://discovery.etcd.io/"
