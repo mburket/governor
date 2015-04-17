@@ -11,12 +11,6 @@ class Etcd:
         self.ttl = config["ttl"]
         self.get_etcd_leader(config["host"])
         self.etcd_local = config["host"]
-        # try:
-        #     url = "http://" + config["host"] + "/v2/keys/service/batman/etcd_leader"
-        #     res = json.loads(urllib2.urlopen(url).read())
-        #     self.host = res["node"]["value"]
-        # except Exception, e:
-        #     self.host = config["host"]
 
     def get_etcd_leader(self, host):
         attempts = 0
