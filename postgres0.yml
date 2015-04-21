@@ -1,4 +1,7 @@
 loop_wait: 10
+rt53:
+  zone: accint.co
+  region: us-east-1
 etcd:
   scope: batman
   ttl: 30
