@@ -22,6 +22,7 @@ class Ha:
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
 
     def update_lock(self):
+        print "updating lock"
         return self.etcd.update_leader(self.state_handler.name)
 
     def is_unlocked(self):

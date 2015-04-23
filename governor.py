@@ -9,6 +9,8 @@ from helpers.ha import Ha
 
 import local_lib
 
+our_ip = local_lib.ec2_ip()
+
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
 f = open(sys.argv[1], "r")
@@ -16,7 +18,7 @@ config = yaml.load(f.read())
 f.close()
 
 # configure the postgres
-config["postgresql"]["listen"] = local_lib.ec2_ip() + ":" + str(config["postgresql"]["port"])
+config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
 postgresql = Postgresql(config["postgresql"])
 
 etcd = Etcd(config["etcd"])
