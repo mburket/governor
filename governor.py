@@ -11,7 +11,6 @@ from helpers.rt53 import Rt53
 
 ec2 = Ec2()
 our_ip = ec2.ec2_ip()
-config["rt53"]["our_ip"] = our_ip
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
@@ -23,6 +22,7 @@ f.close()
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
 postgresql = Postgresql(config["postgresql"])
 
+config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
 ha = Ha(postgresql, etcd, rt53)
