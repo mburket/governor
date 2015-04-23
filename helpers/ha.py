@@ -14,7 +14,7 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 class Ha:
-    def __init__(self, state_handler, etcd):
+    def __init__(self, state_handler, etcd, rt53):
         self.state_handler = state_handler
         self.etcd = etcd
 
@@ -22,7 +22,7 @@ class Ha:
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
 
     def update_lock(self):
-        print "updating lock"
+        rt53.update()
         return self.etcd.update_leader(self.state_handler.name)
 
     def is_unlocked(self):

@@ -6,10 +6,12 @@ import logging
 from helpers.etcd import Etcd
 from helpers.postgresql import Postgresql
 from helpers.ha import Ha
+from helpers.ec2 import Ec2
+from helpers.rt53 import Rt53
 
-import local_lib
-
-our_ip = local_lib.ec2_ip()
+ec2 = Ec2()
+our_ip = ec2.ec2_ip()
+config["rt53"]["our_ip"] = our_ip
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
@@ -21,8 +23,9 @@ f.close()
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
 postgresql = Postgresql(config["postgresql"])
 
+rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
-ha = Ha(postgresql, etcd)
+ha = Ha(postgresql, etcd, rt53)
 
 # stop postgresql on script exit
 def stop_postgresql():
