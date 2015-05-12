@@ -4,7 +4,6 @@ import time
 import subprocess
 import urllib2
 from urllib import urlencode
-import logging
 
 from helpers.ec2 import Ec2
 
@@ -38,9 +37,7 @@ while True:
 		request.get_method = lambda: 'PUT'
 		opener.open(request)			
 		print "i am etcd leader. updated leader key."
-		logging.info("i am etcd leader. updated leader key.")
 	except (urllib2.HTTPError, urllib2.URLError) as e:
 		print "i am etcd follower."
-		logging.info("i am etcd follower.")
 
 	time.sleep(30)		

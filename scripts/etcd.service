@@ -1,0 +1,12 @@
+# This service is meant for systemd systems
+# it runs etcd_runner.py from /var/lib/pgsql/governor folder
+
+[Unit]
+Description=Etcd Start Script
+After=syslog.target network.target
+
+[Service]
+ExecStart=/var/lib/pgsql/governor/etcd_runner.py > /tmp/etcd_runner.log
+
+[Install]
+WantedBy=multi-user.target
