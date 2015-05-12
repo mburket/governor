@@ -11,6 +11,11 @@ from helpers.rt53 import Rt53
 import syslog
 from socket import gethostname
 
+psql_bin_path = "/usr/pgsql-9.4/bin"
+
+# add system path
+os.environ['PATH'] += os.pathsep + psql_bin_path
+
 ec2 = Ec2()
 our_ip = ec2.ec2_ip()
 
