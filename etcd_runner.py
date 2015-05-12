@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 
-import local_lib
 import time
 import subprocess
 import urllib2
 from urllib import urlencode
+
+from helpers.ec2 import Ec2
+
+ec2 = Ec2()
 
 # vars
 base = "https://discovery.etcd.io/"
 etcd_cluster = "168ae83577546eb25f2f9c117511730a"
 discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
-ip = local_lib.ec2_ip()
-hostname = local_lib.ec2_name()
+ip = ec2.ec2_ip()
+hostname = ec2.ec2_name()
 config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
 host = ip + ":4001"
 
