@@ -6,7 +6,7 @@ Description=Etcd Start Script
 After=syslog.target network.target
 
 [Service]
-ExecStart=/var/lib/pgsql/governor/etcd_runner.py > /tmp/etcd_runner.log
+ExecStart=/var/lib/pgsql/governor/etcd_runner.py
 
 [Install]
 WantedBy=multi-user.target
