@@ -1,12 +1,7 @@
 import os, psycopg2, re, time
-# import logging
 import syslog
 
 from urlparse import urlparse
-
-
-# logger = logging.getLogger(__name__)
-
 
 class Postgresql:
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import sys, os, yaml, time, urllib2, atexit
-# import logging
 
 from helpers.etcd import Etcd
 from helpers.postgresql import Postgresql
@@ -10,17 +9,17 @@ from helpers.ec2 import Ec2
 from helpers.rt53 import Rt53
 
 import syslog
+from socket import gethostname
 
 ec2 = Ec2()
 our_ip = ec2.ec2_ip()
-
-# logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
 
 # configure the postgres
+config["postgresql"]["name"] = gethostname().split('.')[0]
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
 postgresql = Postgresql(config["postgresql"])
 

@@ -1,14 +1,10 @@
 import sys, time, re, urllib2, json, psycopg2
-# import logging
 import syslog
 from base64 import b64decode
 
 import helpers.errors
 
 import inspect
-
-# logger = logging.getLogger(__name__)
-
 
 def lineno():
     """Returns the current line number in our program."""

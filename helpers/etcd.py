@@ -1,10 +1,7 @@
 import urllib2, json, os, time
-# import logging
 import syslog
 from urllib import urlencode
 import helpers.errors
-
-# logger = logging.getLogger(__name__)
 
 class Etcd:
     def __init__(self, config):
