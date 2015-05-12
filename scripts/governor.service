@@ -1,0 +1,6 @@
+# This service is meant for systemd systems
+# it runs etcd_runner.py from /var/lib/pgsql/governor folder
+
+[Unit]
+Description=Governor Start Script
+After=syslog.target network.target

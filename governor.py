@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, os, yaml, time, urllib2, atexit
-import logging
+# import logging
 
 from helpers.etcd import Etcd
 from helpers.postgresql import Postgresql
@@ -9,10 +9,12 @@ from helpers.ha import Ha
 from helpers.ec2 import Ec2
 from helpers.rt53 import Rt53
 
+import syslog
+
 ec2 = Ec2()
 our_ip = ec2.ec2_ip()
 
-logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
@@ -39,7 +41,7 @@ while not etcd_ready:
         etcd.touch_member(postgresql.name, postgresql.connection_string)
         etcd_ready = True
     except urllib2.URLError:
-        logging.info("waiting on etcd")
+        syslog.syslog("waiting on etcd")
         time.sleep(5)
 
 # is data directory empty?
@@ -68,7 +70,7 @@ else:
     postgresql.start()
 
 while True:
-    logging.info(ha.run_cycle())
+    syslog.syslog(ha.run_cycle())
 
     # create replication slots
     if postgresql.is_leader():

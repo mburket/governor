@@ -37,10 +37,8 @@ while True:
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
 		request.get_method = lambda: 'PUT'
 		opener.open(request)			
-		# print "i am etcd leader. updated leader key."
 		syslog.syslog("i am etcd leader. updated leader key.")
 	except (urllib2.HTTPError, urllib2.URLError) as e:
-		# print "i am etcd follower."
 		syslog.syslog("i am etcd follower.")
 
 	time.sleep(30)		
