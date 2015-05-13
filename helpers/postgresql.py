@@ -63,14 +63,16 @@ class Postgresql:
     def sync_from_leader(self, leader):
         leader = urlparse(leader["address"])
 
-        f = open("./pgpass", "w")
+        pgpass = "/var/lib/pgsql/pgpass"
+
+        f = open(pgpass, "w")
         f.write("%(hostname)s:%(port)s:*:%(username)s:%(password)s\n" %
                 {"hostname": leader.hostname, "port": leader.port, "username": leader.username, "password": leader.password})
         f.close()
 
-        os.system("chmod 600 pgpass")
+        os.system("chmod 600 " + pgpass)
 
-        return os.system("PGPASSFILE=pgpass pg_basebackup -R -D %(data_dir)s --host=%(host)s --port=%(port)s -U %(username)s" %
+        return os.system("PGPASSFILE=" + pgpass +  " pg_basebackup -R -D %(data_dir)s --host=%(host)s --port=%(port)s -U %(username)s" %
                 {"data_dir": self.data_dir, "host": leader.hostname, "port": leader.port, "username": leader.username}) == 0
 
     def is_leader(self):
