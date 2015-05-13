@@ -1,4 +1,3 @@
-import logging
 from boto import route53
 
 # docs: http://boto.readthedocs.org/en/latest/ref/route53.html#module-boto.route53.record
