@@ -3,9 +3,10 @@ rt53:
   zone: accint.co
   region: us-east-1
   stack: prod
+  ttl: 5
 etcd:
   scope: batman
-  ttl: 30
+  ttl: 15
   host: 127.0.0.1:4001
 postgresql:
   port: 5432
