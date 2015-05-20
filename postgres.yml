@@ -4,6 +4,9 @@ rt53:
   region: us-east-1
   stack: prod
   ttl: 5
+sns:
+  region: us-east-1
+  arn: arn:aws:sns:us-east-1:341664886101:YoniNotify
 etcd:
   scope: batman
   ttl: 15

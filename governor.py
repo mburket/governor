@@ -7,6 +7,7 @@ from helpers.postgresql import Postgresql
 from helpers.ha import Ha
 from helpers.ec2 import Ec2
 from helpers.rt53 import Rt53
+from helpers.sns import Sns
 
 import syslog
 from socket import gethostname
@@ -30,7 +31,8 @@ postgresql = Postgresql(config["postgresql"])
 config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
-ha = Ha(postgresql, etcd, rt53)
+sns = Sns(config["sns"])
+ha = Ha(postgresql, etcd, rt53, sns)
 
 # stop postgresql on script exit
 def stop_postgresql():

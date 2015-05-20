@@ -11,10 +11,11 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 class Ha:
-    def __init__(self, state_handler, etcd, rt53):
+    def __init__(self, state_handler, etcd, rt53, sns):
         self.state_handler = state_handler
         self.etcd = etcd
         self.rt53 = rt53
+        self.sns = sns
 
     def acquire_lock(self):
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
