@@ -43,7 +43,7 @@ class Ha:
                                 # update DNS
                                 self.rt53.update()
                                 # publish message to SNS
-                                self.sns.publish('leader lock updated.')                                
+                                self.sns.publish('leader lock changed.')                                
                                 return "promoted self to leader by acquiring session lock"
 
                             return "acquired session lock as a leader"
