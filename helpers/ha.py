@@ -22,6 +22,7 @@ class Ha:
 
     def update_lock(self):
         self.rt53.update()
+        self.sns.publish('leader lock updated.')
         return self.etcd.update_leader(self.state_handler.name)
 
     def is_unlocked(self):
