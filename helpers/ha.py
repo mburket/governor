@@ -21,8 +21,6 @@ class Ha:
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
 
     def update_lock(self):
-        self.rt53.update()
-        self.sns.publish('leader lock updated.')
         return self.etcd.update_leader(self.state_handler.name)
 
     def is_unlocked(self):
@@ -42,6 +40,10 @@ class Ha:
                         if self.acquire_lock():
                             if not self.state_handler.is_leader():
                                 self.state_handler.promote()
+                                # update DNS
+                                self.rt53.update()
+                                # publish message to SNS
+                                self.sns.publish('leader lock updated.')                                
                                 return "promoted self to leader by acquiring session lock"
 
                             return "acquired session lock as a leader"
