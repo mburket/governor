@@ -19,25 +19,21 @@ def reciver_checker():
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
-		try:
-			pids = map(str,check_output(["pidof",name]).split())
-			for p in pids:
-				p_file = "/proc/%s/cmdline" % (p)
-				f = open(p_file, "r")
-				cmdline = f.read()
-				f.close()
-				find = cmdline.find(reciever_cmd_str)
-				if find == 0:
-					status = True
-					break
-
-		except Exception, e:
-			return status
-
-		return status	
+		pids = map(str,check_output(["pidof",name]).split())
+		for p in pids:
+			p_file = "/proc/%s/cmdline" % (p)
+			f = open(p_file, "r")
+			cmdline = f.read()
+			f.close()
+			find = cmdline.find(reciever_cmd_str)
+			if find == 0:
+				status = True
+				break
 
 	except Exception, e:
-		raise e
+		return status
+
+	return status	
 
 # rm everything in a folder
 def rm(folder):
@@ -51,27 +47,46 @@ def rm(folder):
 		except Exception, e:
 			raise e
 
+# make lock file
+def mk_lock_file(lock):
+    f = open(lock, 'w')
+    f.write('')
+    f.close()			
+
 # main
+lock_file = "/tmp/wd.lck"
 try:
-	# determine that we are slave
-	if etcd.current_leader()["hostname"] != gethostname().split('.')[0]:
-		# determine if reciver is not running
-		max_count = 6
-		count = 0
-		while True:
-			if reciver_checker() == False:
-				count += 1
-				time.sleep(10)
-				if count > max_count:
-					# stop governor cleanup the data dir and start the governor				
-					cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-					call(cmd)
-					rm('/pg_cluster/pgsql/9.4/data/')
-					cmd = [ '/bin/systemctl', 'start', 'governor' ]
-					call(cmd)
+	# determine that we are slave		
+	if not etcd.current_leader()["hostname"] == gethostname().split('.')[0]:
+		if not os.path.isfile(lock_file):
+			mk_lock_file(lock_file)
+
+			# determine if reciver is not running
+			max_count = 6
+			count = 0
+			while True:
+				if reciver_checker() == False:
+					count += 1
+					time.sleep(10)
+					if count > max_count:
+						# stop governor cleanup the data dir and start the governor				
+						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
+						call(cmd)
+						rm('/pg_cluster/pgsql/9.4/data/')
+						cmd = [ '/bin/systemctl', 'start', 'governor' ]
+						call(cmd)
+						break
+				else:
 					break
-			else:
-				break
+
+			os.unlink(lock_file)
+
+		else:
+			# check the age of lockfile if too old remove
+			delta = time.time() - os.path.getmtime(lock_file)
+			max_age = 60 * 60 * 2
+			if delta > max_age:
+				os.unlink(lock_file)
 
 	else:
 		print "i am the leader"
