@@ -1,3 +1,4 @@
+# This is a fork that is meant to work in AWS environment
 # Governor: A Template for PostgreSQL HA with etcd
 
 *There are many ways to run high availability with PostgreSQL; here we present a template for you to create your own custom fit high availability solution using etcd and python for maximum accessibility.*
@@ -9,8 +10,7 @@ To get started, do the following from different terminals:
 
 ```
 > etcd --data-dir=data/etcd
-> ./governor.py postgres0.yml
-> ./governor.py postgres1.yml
+> ./governor.py postgres.yml
 ```
 
 From there, you will see a high-availability cluster start up. Test
@@ -18,18 +18,6 @@ different settings in the YAML files to see how behavior changes.  Kill
 some of the different components to see how the system behaves.
 
 Add more `postgres*.yml` files to create an even larger cluster.
-
-To get a haproxy load balancing between these two hosts, run:
-
-```
-> haproxy -f haproxy.cfg
-> sh haproxy_status.sh 127.0.0.1 5432 15432
-> sh haproxy_status.sh 127.0.0.1 5433 15433
-```
-
-```
-> psql --host 127.0.0.1 --port 5000 postgres
-```
 
 ## How Governor works
 
