@@ -65,26 +65,17 @@ try:
 			mk_lock_file(lock_file)
 
 			# determine if reciver is not running
-			max_count = 6
-			count = 0
-			while True:
-				receiver_checker_status = receiver_checker()
-				if receiver_checker_status == False:		
-					count += 1
-					time.sleep(10)
-					if count > max_count:
-						# stop governor cleanup the data dir and start the governor
-						err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
-						syslog.syslog(err_msg)
-						sns.publish(err_msg)
-						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-						subprocess.call(cmd)
-						rm('/pg_cluster/pgsql/9.4/data/')
-						cmd = [ '/bin/systemctl', 'start', 'governor' ]
-						subprocess.call(cmd)
-						break
-				else:
-					break
+			receiver_checker_status = receiver_checker()
+			if receiver_checker_status == False:		
+				# stop governor cleanup the data dir and start the governor
+				err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
+				syslog.syslog(err_msg)
+				sns.publish(err_msg)
+				cmd = [ '/bin/systemctl', 'stop', 'governor' ]
+				subprocess.call(cmd)
+				rm('/pg_cluster/pgsql/9.4/data/')
+				cmd = [ '/bin/systemctl', 'start', 'governor' ]
+				subprocess.call(cmd)
 
 			os.unlink(lock_file)
 
