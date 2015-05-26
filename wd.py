@@ -75,7 +75,7 @@ try:
 				# stop governor cleanup the data dir and start the governor
 				err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
 				syslog.syslog(err_msg)
-				sns.publish(err_msg)
+				# sns.publish(err_msg)
 				# DEBUG
 				# cmd = [ '/bin/systemctl', 'stop', 'governor' ]
 				# subprocess.call(cmd)
