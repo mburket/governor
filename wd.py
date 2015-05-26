@@ -8,7 +8,7 @@ from socket import gethostname
 
 import syslog
 
-os.environ['PATH'] += os.pathsep + '/bin'
+os.environ['PATH'] += os.pathsep + '/usr/sbin'
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
@@ -24,8 +24,6 @@ def receiver_checker():
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
-		tmp = subprocess.check_output(["pidof", name])
-		syslog.syslog(str(tmp))
 		pids = map(str, subprocess.check_output(["pidof", name], shell = True, stderr = subprocess.STDOUT).split())
 		# debug
 		syslog.syslog(str(pids))
