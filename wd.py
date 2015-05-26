@@ -23,6 +23,8 @@ def receiver_checker():
 	status = False
 	try:
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
+		# debug
+		syslog.syslog(str(pids))
 		for p in pids:
 			p_file = "/proc/%s/cmdline" % (p)
 			f = open(p_file, "r")
