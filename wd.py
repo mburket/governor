@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 
 import sys, yaml, time, subprocess, os, shutil
 
@@ -22,6 +22,8 @@ def receiver_checker():
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
+		tmp = subprocess.check_output(["pidof", name])
+		syslog.syslog(str(tmp))
 		pids = map(str, subprocess.check_output(["pidof", name], shell = True, stderr = subprocess.STDOUT).split())
 		# debug
 		syslog.syslog(str(pids))
