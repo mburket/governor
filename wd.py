@@ -7,6 +7,8 @@ from socket import gethostname
 from subprocess import check_output
 from subprocess import call
 
+import syslog
+
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
@@ -66,6 +68,7 @@ try:
 			count = 0
 			while True:
 				if reciver_checker() == False:
+					syslog.syslog("can't see reciver proc. re-initilizing slave.")
 					count += 1
 					time.sleep(10)
 					if count > max_count:
