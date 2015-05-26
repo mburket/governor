@@ -33,6 +33,7 @@ def receiver_checker():
 				break
 
 	except Exception, e:
+		syslog.syslog(str(e))
 		return status
 
 	return status	
