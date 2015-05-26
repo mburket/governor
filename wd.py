@@ -5,8 +5,6 @@ import sys, yaml, time, subprocess, os, shutil
 from helpers.etcd import Etcd
 from helpers.sns import Sns
 from socket import gethostname
-from subprocess import check_output
-from subprocess import call
 
 import syslog
 
@@ -18,12 +16,12 @@ etcd = Etcd(config["etcd"])
 sns = Sns(config["sns"])
 
 # check if receiver is running
-def reciver_checker():
+def receiver_checker():
 	name = "postgres"
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
-		pids = map(str,check_output(["pidof",name]).split())
+		pids = map(str, subprocess.check_output(["pidof", name]).split())
 		for p in pids:
 			p_file = "/proc/%s/cmdline" % (p)
 			f = open(p_file, "r")
@@ -69,20 +67,19 @@ try:
 			max_count = 6
 			count = 0
 			while True:
-				reciver_checker_status = reciver_checker()
-				print reciver_checker_status
-				if reciver_checker_status == False:		
+				receiver_checker_status = receiver_checker()
+				if receiver_checker_status == False:		
 					count += 1
 					time.sleep(10)
 					if count > max_count:
 						# stop governor cleanup the data dir and start the governor
-						err_msg = "can't see reciver proc. re-initilizing slave."
+						err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
 						syslog.syslog(err_msg)
 						sns.publish(err_msg)
 						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-						call(cmd)
+						subprocess.call(cmd)
 						rm('/pg_cluster/pgsql/9.4/data/')
-						cmd = [ '/bin/systemctl', 'start', 'governor' ]
+						subprocess.cmd = [ '/bin/systemctl', 'start', 'governor' ]
 						call(cmd)
 						break
 				else:
