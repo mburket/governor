@@ -25,17 +25,22 @@ def receiver_checker():
 	status = False
 	try:
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
-		# debug
-		syslog.syslog(str(pids))
-		for p in pids:
-			p_file = "/proc/%s/cmdline" % (p)
-			f = open(p_file, "r")
-			cmdline = f.read()
-			f.close()
-			find = cmdline.find(reciever_cmd_str)
-			if find == 0:
-				status = True
-				break
+		if len(pids) == 0:
+			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
+			if len(pids) > 0:
+				return True
+			else:
+				return False
+		else:			
+			for p in pids:
+				p_file = "/proc/%s/cmdline" % (p)
+				f = open(p_file, "r")
+				cmdline = f.read()
+				f.close()
+				find = cmdline.find(reciever_cmd_str)
+				if find == 0:
+					status = True
+					break
 
 	except Exception, e:
 		syslog.syslog(str(e))
@@ -75,13 +80,13 @@ try:
 				# stop governor cleanup the data dir and start the governor
 				err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
 				syslog.syslog(err_msg)
-				# sns.publish(err_msg)
-				# DEBUG
-				# cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-				# subprocess.call(cmd)
-				# rm('/pg_cluster/pgsql/9.4/data/')
-				# cmd = [ '/bin/systemctl', 'start', 'governor' ]
-				# subprocess.call(cmd)
+				sns.publish(err_msg)
+				# re-initilize
+				cmd = [ '/bin/systemctl', 'stop', 'governor' ]
+				subprocess.call(cmd)
+				rm('/pg_cluster/pgsql/9.4/data/')
+				cmd = [ '/bin/systemctl', 'start', 'governor' ]
+				subprocess.call(cmd)
 
 			os.unlink(lock_file)
 
