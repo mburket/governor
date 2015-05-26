@@ -18,6 +18,7 @@ sns = Sns(config["sns"])
 # check if receiver is running
 def receiver_checker():
 	name = "postgres"
+	name_backup = "pg_basebackup"
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
@@ -71,11 +72,12 @@ try:
 				err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
 				syslog.syslog(err_msg)
 				sns.publish(err_msg)
-				cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-				subprocess.call(cmd)
-				rm('/pg_cluster/pgsql/9.4/data/')
-				cmd = [ '/bin/systemctl', 'start', 'governor' ]
-				subprocess.call(cmd)
+				# DEBUG
+				# cmd = [ '/bin/systemctl', 'stop', 'governor' ]
+				# subprocess.call(cmd)
+				# rm('/pg_cluster/pgsql/9.4/data/')
+				# cmd = [ '/bin/systemctl', 'start', 'governor' ]
+				# subprocess.call(cmd)
 
 			os.unlink(lock_file)
 
