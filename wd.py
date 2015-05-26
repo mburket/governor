@@ -80,8 +80,8 @@ try:
 						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
 						subprocess.call(cmd)
 						rm('/pg_cluster/pgsql/9.4/data/')
-						subprocess.cmd = [ '/bin/systemctl', 'start', 'governor' ]
-						call(cmd)
+						cmd = [ '/bin/systemctl', 'start', 'governor' ]
+						subprocess.call(cmd)
 						break
 				else:
 					break
