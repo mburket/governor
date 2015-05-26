@@ -3,6 +3,7 @@
 import sys, yaml, time, subprocess, os, shutil
 
 from helpers.etcd import Etcd
+from helpers.sns import Sns
 from socket import gethostname
 from subprocess import check_output
 from subprocess import call
@@ -14,6 +15,7 @@ config = yaml.load(f.read())
 f.close()
 
 etcd = Etcd(config["etcd"])
+sns = Sns(config["sns"])
 
 # check if receiver is running
 def reciver_checker():
@@ -69,12 +71,14 @@ try:
 			while True:
 				reciver_checker_status = reciver_checker()
 				print reciver_checker_status
-				if reciver_checker_status == False:					
+				if reciver_checker_status == False:		
 					count += 1
 					time.sleep(10)
 					if count > max_count:
 						# stop governor cleanup the data dir and start the governor
-						syslog.syslog("can't see reciver proc. re-initilizing slave.")
+						err_msg = "can't see reciver proc. re-initilizing slave."
+						syslog.syslog(err_msg)
+						sns.publish(err_msg)
 						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
 						call(cmd)
 						rm('/pg_cluster/pgsql/9.4/data/')
