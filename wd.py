@@ -24,7 +24,7 @@ def receiver_checker():
 	reciever_cmd_str = "postgres: wal receiver process"
 	status = False
 	try:
-		pids = map(str, subprocess.check_output(["pidof", name], shell = True, stderr = subprocess.STDOUT).split())
+		pids = map(str, subprocess.check_output(["pidof", name]).split())
 		# debug
 		syslog.syslog(str(pids))
 		for p in pids:
