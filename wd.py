@@ -28,7 +28,6 @@ def reciver_checker():
 			cmdline = f.read()
 			f.close()
 			find = cmdline.find(reciever_cmd_str)
-			print find
 			if find == 0:
 				status = True
 				break
@@ -69,8 +68,8 @@ try:
 			count = 0
 			while True:
 				reciver_checker_status = reciver_checker()
-				if reciver_checker_status == False:
-					print reciver_checker_status
+				print reciver_checker_status
+				if reciver_checker_status == False:					
 					count += 1
 					time.sleep(10)
 					if count > max_count:
