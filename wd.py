@@ -28,6 +28,7 @@ def reciver_checker():
 			cmdline = f.read()
 			f.close()
 			find = cmdline.find(reciever_cmd_str)
+			print find
 			if find == 0:
 				status = True
 				break
@@ -67,12 +68,14 @@ try:
 			max_count = 6
 			count = 0
 			while True:
-				if reciver_checker() == False:
-					syslog.syslog("can't see reciver proc. re-initilizing slave.")
+				reciver_checker_status = reciver_checker()
+				if reciver_checker_status == False:
+					print reciver_checker_status
 					count += 1
 					time.sleep(10)
 					if count > max_count:
-						# stop governor cleanup the data dir and start the governor				
+						# stop governor cleanup the data dir and start the governor
+						syslog.syslog("can't see reciver proc. re-initilizing slave.")
 						cmd = [ '/bin/systemctl', 'stop', 'governor' ]
 						call(cmd)
 						rm('/pg_cluster/pgsql/9.4/data/')
