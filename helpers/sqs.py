@@ -12,3 +12,6 @@ class Sqs:
 
 	def receive(self):
 		pass
+
+	def delete(self):
+		pass

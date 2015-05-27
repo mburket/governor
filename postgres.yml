@@ -16,11 +16,11 @@ postgresql:
   data_dir: /pg_cluster/pgsql/9.4/data
   replication:
     username: replicator
-    password: rep-pass
+    password: rep-pass # to be replaced with KMS hash
     network: 10.0.0.0/16
   psql:
     username: postgres
-    password: SecurePassword    
+    password: SecurePassword # to be replaced with KMS hash
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:
