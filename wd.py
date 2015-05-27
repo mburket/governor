@@ -26,6 +26,7 @@ def receiver_checker():
 	try:
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
 		if len(pids) == 0:
+			# check if we are in restore phase
 			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
 			if len(pids) > 0:
 				return True
