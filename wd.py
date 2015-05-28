@@ -25,10 +25,10 @@ def receiver_checker():
 	status = False
 	try:
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
-		if len(pids) == 0:
+		if not isinstance(pids, list):
 			# check if we are in restore phase
 			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
-			if len(pids) > 0:
+			if isinstance(pids, list):
 				return True
 			else:
 				return False
