@@ -48,7 +48,7 @@ def receiver_checker():
 				return status						
 		except Exception, e:
 			syslog.syslog(str(e))
-			raise e
+			return status
 
 # rm everything in a folder
 def rm(folder):
