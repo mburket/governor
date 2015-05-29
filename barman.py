@@ -14,11 +14,11 @@ sqs = Sqs(config["sqs"])
 
 m = sqs.read()
 
-print m
 try:
 	raw_body = m.get_body()
 	body = json.loads(raw_body)
 	master = body["master"]
-	print master
+	cmd = [ "/bin/barman", "backup", master ]
+	print cmd
 except Exception, e:
 	raise e
