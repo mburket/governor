@@ -16,7 +16,9 @@ m = sqs.read()
 
 print m
 try:
-	body = m.get_body()
-	print body
+	raw_body = m.get_body()
+	body = json.loads(raw_body)
+	name = body["name"]
+	print name
 except Exception, e:
 	raise e
