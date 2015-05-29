@@ -12,6 +12,7 @@ f.close()
 sns = Sns(config["sns"])
 sqs = Sqs(config["sqs"])
 
-sqs_msg = sqs.read()
+m = sqs.read()
 
-print sqs_msg
+print m
+print m.get_body()
