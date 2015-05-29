@@ -70,7 +70,7 @@ def mk_lock_file(lock):
 # main
 lock_file = "/tmp/wd.lck"
 try:
-	# determine that we are slave		
+	# determine that we are slave
 	if not etcd.current_leader()["hostname"] == gethostname().split('.')[0]:
 		if not os.path.isfile(lock_file):
 			mk_lock_file(lock_file)
