@@ -1,5 +1,6 @@
 from boto import sqs
 from boto.sqs.message import Message
+import json
 
 # docs: 
 # http://boto.readthedocs.org/en/latest/ref/sqs.html
@@ -14,7 +15,7 @@ class Sqs:
 		try:
 			msg = { "master": hostname }
 			m = Message()
-			m.set_body(msg)
+			m.set_body(json.dumps(msg))
 			self.queue.write(m)
 		except Exception, e:
 			raise e
@@ -24,7 +25,7 @@ class Sqs:
 			rs = self.queue.get_messages()
 			if len(rs) > 0:
 				m = rs[0]
-				return m
+				return json.loads(m)
 		except Exception, e:
 			raise e
 
