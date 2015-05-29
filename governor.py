@@ -77,7 +77,7 @@ else:
     postgresql.start()
 
 while True:
-    syslog.syslog(ha.run_cycle())
+    syslog.syslog(str(ha.run_cycle()))
 
     # create replication slots
     if postgresql.is_leader():
