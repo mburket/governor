@@ -24,10 +24,9 @@ class Sqs:
 	def read(self):
 		try:
 			rs = self.queue.get_messages()
-			print rs
 			if len(rs) > 0:
 				m = rs[0]
-				return json.loads(m)
+				return m
 		except Exception, e:
 			raise e
 
