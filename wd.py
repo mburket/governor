@@ -8,6 +8,8 @@ from socket import gethostname
 
 import syslog
 
+hostname = gethostname()
+
 os.environ['PATH'] += os.pathsep + '/usr/sbin'
 
 f = open(sys.argv[1], "r")
@@ -47,7 +49,6 @@ def receiver_checker():
 			else:
 				return status						
 		except Exception, e:
-			syslog.syslog(str(e))
 			return status
 
 # rm everything in a folder
@@ -80,7 +81,7 @@ try:
 			receiver_checker_status = receiver_checker()
 			if receiver_checker_status == False:		
 				# stop governor cleanup the data dir and start the governor
-				err_msg = "receiver_checker_status status is %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status)
+				err_msg = "receiver_checker_status status is %s on %s. can't see receiver proc. re-initilizing slave." % (receiver_checker_status, hostname)
 				syslog.syslog(err_msg)
 				sns.publish(err_msg)
 				# re-initilize
