@@ -15,6 +15,8 @@ sqs = Sqs(config["sqs"])
 m = sqs.read()
 
 print m
-
-m_obj = json.load(m.get_body())
-print m_obj
+try:
+	body = m.get_body()
+	print body
+except Exception, e:
+	raise e
