@@ -24,6 +24,5 @@ try:
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	out, err = p.communicate()
 	sns.publish(out)
-	print cmd
 except Exception, e:
 	pass
