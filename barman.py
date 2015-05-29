@@ -18,7 +18,7 @@ print m
 try:
 	raw_body = m.get_body()
 	body = json.loads(raw_body)
-	name = body["name"]
-	print name
+	master = body["master"]
+	print master
 except Exception, e:
 	raise e
