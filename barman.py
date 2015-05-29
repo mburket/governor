@@ -3,6 +3,7 @@
 import sys, yaml, time, subprocess, os, shutil
 
 from helpers.sqs import Sqs
+from helpers.sns import Sns
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
