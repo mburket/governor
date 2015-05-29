@@ -1,6 +1,5 @@
 from boto import sqs
 from boto.sqs.message import Message
-from socket import gethostname
 
 # docs: 
 # http://boto.readthedocs.org/en/latest/ref/sqs.html
@@ -10,11 +9,10 @@ class Sqs:
 	def __init__(self, config):	
 		self.conn = sqs.connect_to_region(config["region"])
 		self.queue = self.conn.get_queue(config["name"])
-		self.hostname = gethostname()
 
-	def send(self):
+	def send(self, hostname):
 		try:
-			msg = { "master": self.hostname }
+			msg = { "master": hostname }
 			m = Message()
 			m.set_body(msg)
 			self.queue.write(m)

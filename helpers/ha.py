@@ -47,7 +47,7 @@ class Ha:
                                 sns_msg = "leader lock changed to %s" % (hostname)
                                 self.sns.publish(sns_msg) 
                                 # publish a SQS
-                                self.sqs.send()                     
+                                self.sqs.send(hostname)                     
                                 return "promoted self to leader by acquiring session lock"
 
                             return "acquired session lock as a leader"
