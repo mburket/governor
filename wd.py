@@ -25,15 +25,7 @@ def receiver_checker():
 	status = False
 	try:
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
-		if not isinstance(pids, list):
-			# check if we are in restore phase
-			print "I'm here # 1"
-			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
-			if isinstance(pids, list):
-				return True
-			else:
-				return False
-		else:			
+		if isinstance(pids, list):
 			for p in pids:
 				p_file = "/proc/%s/cmdline" % (p)
 				f = open(p_file, "r")
@@ -43,13 +35,20 @@ def receiver_checker():
 				if find == 0:
 					status = True
 					break
+					return status
 
 	except Exception, e:
-		print "I'm here # 2"
-		syslog.syslog(str(e))
-		return status
-
-	return status	
+		try:
+			# check if we are in restore phase
+			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
+			if isinstance(pids, list):
+				status = True
+				return status
+			else:
+				return status						
+		except Exception, e:
+			syslog.syslog(str(e))
+			raise e
 
 # rm everything in a folder
 def rm(folder):
