@@ -17,13 +17,13 @@ try:
 	raw_body = m.get_body()
 	body = json.loads(raw_body)
 	master = body["master"]
-	self.sns.publish('starting backup in 10 minutes...')
+	sns.publish('starting backup in 10 minutes...')
 	sqs.delete(m)
 	time.sleep(600)
 	cmd = [ "/bin/barman", "backup", master ]
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	out, err = p.communicate()
-	self.sns.publish(out)
+	sns.publish(out)
 	print cmd
 except Exception, e:
 	pass
