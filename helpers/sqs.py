@@ -32,6 +32,7 @@ class Sqs:
 
 	def delete(self, m):
 		try:
-			self.queue.delete_message(m)
+			res = self.queue.delete_message(m)
+			return res
 		except Exception, e:
 			raise e
