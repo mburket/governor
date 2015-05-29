@@ -34,7 +34,7 @@ rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
 sns = Sns(config["sns"])
 sqs = Sqs(config["sqs"])
-ha = Ha(postgresql, etcd, rt53, sns, sqs)
+ha = Ha(postgresql, etcd, rt53, sns, sqs, config["postgresql"]["name"])
 
 # stop postgresql on script exit
 def stop_postgresql():

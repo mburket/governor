@@ -11,8 +11,7 @@ class Sns:
 
 	def publish(self, message):
 		try:
-			new_message = "%s to %s" % (message, self.hostname)
-			self.conn.publish(self.arn, new_message)
+			self.conn.publish(self.arn, message)
 		except Exception, e:
 			raise e
 		

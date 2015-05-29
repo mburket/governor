@@ -11,7 +11,7 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 class Ha:
-    def __init__(self, state_handler, etcd, rt53, sns, sqs):
+    def __init__(self, state_handler, etcd, rt53, sns, sqs, hostname):
         self.state_handler = state_handler
         self.etcd = etcd
         self.rt53 = rt53
@@ -44,7 +44,8 @@ class Ha:
                                 # update DNS
                                 self.rt53.update()
                                 # publish message to SNS
-                                self.sns.publish('leader lock changed')     
+                                sns_msg = "leader lock changed to %s" % (hostname)
+                                self.sns.publish(sns_msg) 
                                 # publish a SQS
                                 self.sqs.send()                     
                                 return "promoted self to leader by acquiring session lock"
