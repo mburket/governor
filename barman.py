@@ -23,6 +23,7 @@ try:
 	cmd = [ "/bin/barman", "backup", master ]
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	out, err = p.communicate()
+	print err
 	sns.publish(out)
 except Exception, e:
 	pass
