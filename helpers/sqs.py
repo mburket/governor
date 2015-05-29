@@ -16,7 +16,8 @@ class Sqs:
 			msg = { "master": hostname }
 			m = Message()
 			m.set_body(json.dumps(msg))
-			self.queue.write(m)
+			res = self.queue.write(m)
+			return res
 		except Exception, e:
 			raise e
 
