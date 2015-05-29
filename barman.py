@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, yaml, time, subprocess, os, shutil
+import sys, yaml, time, subprocess, os, shutil, json
 
 from helpers.sqs import Sqs
 from helpers.sns import Sns
@@ -15,4 +15,6 @@ sqs = Sqs(config["sqs"])
 m = sqs.read()
 
 print m
-print m.get_body()
+
+m_obj = json.load(m.get_body())
+print m_obj
