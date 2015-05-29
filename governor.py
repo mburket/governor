@@ -25,7 +25,8 @@ config = yaml.load(f.read())
 f.close()
 
 # configure the postgres
-config["postgresql"]["name"] = gethostname().split('.')[0]
+hostname = gethostname()
+config["postgresql"]["name"] = hostname.split('.')[0]
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
 postgresql = Postgresql(config["postgresql"])
 
@@ -34,7 +35,7 @@ rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
 sns = Sns(config["sns"])
 sqs = Sqs(config["sqs"])
-ha = Ha(postgresql, etcd, rt53, sns, sqs, config["postgresql"]["name"])
+ha = Ha(postgresql, etcd, rt53, sns, sqs, hostname)
 
 # stop postgresql on script exit
 def stop_postgresql():
