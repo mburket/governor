@@ -12,7 +12,7 @@ ec2 = Ec2()
 
 # vars
 base = "https://discovery.etcd.io/"
-etcd_cluster = "168ae83577546eb25f2f9c117511730a"
+etcd_cluster = "7678a1a67ab72a04852aecd08dbfeaf3"
 discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = ec2.ec2_ip()
