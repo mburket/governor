@@ -17,6 +17,7 @@ class Ha:
         self.rt53 = rt53
         self.sns = sns
         self.sqs = sqs
+        self.hostname = hostname
 
     def acquire_lock(self):
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
@@ -44,10 +45,10 @@ class Ha:
                                 # update DNS
                                 self.rt53.update()
                                 # publish message to SNS
-                                sns_msg = "leader lock changed to %s" % (hostname)
+                                sns_msg = "leader lock changed to %s" % (self.hostname)
                                 self.sns.publish(sns_msg) 
                                 # publish a SQS
-                                self.sqs.send(hostname)                     
+                                self.sqs.send(self.hostname)                     
                                 return "promoted self to leader by acquiring session lock"
 
                             return "acquired session lock as a leader"
