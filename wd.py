@@ -27,6 +27,7 @@ def receiver_checker():
 		pids = map(str, subprocess.check_output(["pidof", name]).split())
 		if not isinstance(pids, list):
 			# check if we are in restore phase
+			print "I'm here # 1"
 			pids = map(str, subprocess.check_output(["pidof", name_backup]).split())
 			if isinstance(pids, list):
 				return True
@@ -44,6 +45,7 @@ def receiver_checker():
 					break
 
 	except Exception, e:
+		print "I'm here # 2"
 		syslog.syslog(str(e))
 		return status
 
