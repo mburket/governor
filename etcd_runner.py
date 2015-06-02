@@ -20,6 +20,17 @@ hostname = ec2.ec2_name()
 config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
 host = ip + ":4001"
 
+# subs
+def update_leader_key(data):
+	try:
+		path = "http://%s/v2/keys/service/batman/etcd_leader" % (config["host"])
+		opener = urllib2.build_opener(urllib2.HTTPHandler)
+		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
+		request.get_method = lambda: 'PUT'
+		opener.open(request)		
+	except Exception, e:
+		raise e
+
 # main
 # run etcd
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=" + data_dir ]
@@ -53,13 +64,3 @@ while True:
 		syslog.syslog("i am etcd follower.")
 
 	time.sleep(30)
-
-def update_leader_key(data):
-	try:
-		path = "http://%s/v2/keys/service/batman/etcd_leader" % (config["host"])
-		opener = urllib2.build_opener(urllib2.HTTPHandler)
-		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
-		request.get_method = lambda: 'PUT'
-		opener.open(request)		
-	except Exception, e:
-		raise e
