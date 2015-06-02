@@ -22,7 +22,7 @@ host = ip + ":4001"
 
 # main
 # run etcd
-cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=" + data_dir ]
+cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=%s:4001", "-discovery=%s", "-name=%s", "-peer-addr=%s:7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=%s" ] % (ip, discovery, hostname, ip, data_dir)
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 except Exception, e:
@@ -32,13 +32,29 @@ except Exception, e:
 while True:
 	try:
 		data = { "value": host, "ttl": config["ttl"] }
+		leader_url = "http://%s/v2/stats/leader" % (config["host"])
+
+		# test for etcd cluster leader
+		req = urllib2.Request(leader_url)
+		r = urllib2.urlopen(req)
+		out = r.read()
+		j = json.loads(out)
+		test = j['leader']
+
+		update_leader_key(data)			
+		syslog.syslog("i am etcd leader. updated leader key.")
+
+	except Exception, e:
+		syslog.syslog("i am etcd follower.")
+
+	time.sleep(30)
+
+def update_leader_key(data):
+	try:
 		path = "http://%s/v2/keys/service/batman/etcd_leader" % (config["host"])
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
 		request.get_method = lambda: 'PUT'
-		opener.open(request)			
-		syslog.syslog("i am etcd leader. updated leader key.")
-	except (urllib2.HTTPError, urllib2.URLError) as e:
-		syslog.syslog("i am etcd follower.")
-
-	time.sleep(30)		
+		opener.open(request)		
+	except Exception, e:
+		raise e
