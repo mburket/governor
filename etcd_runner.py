@@ -38,7 +38,6 @@ print cmd
 
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-	syslog.syslog(stdout)
 except Exception, e:
 	print str(e)
 
