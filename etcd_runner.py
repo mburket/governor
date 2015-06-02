@@ -32,7 +32,6 @@ def update_leader_key(data):
 # main
 # run etcd
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-data-dir=" + data_dir ]
-print cmd
 
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
