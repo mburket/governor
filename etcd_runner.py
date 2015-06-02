@@ -33,11 +33,13 @@ def update_leader_key(data):
 
 # main
 # run etcd
-cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=" + data_dir ]
+cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "-data-dir=" + data_dir ]
+print cmd
+
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 except Exception, e:
-	raise e
+	print str(e)
 
 # update leader key
 while True:
