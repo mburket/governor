@@ -13,7 +13,9 @@ discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = ec2.ec2_ip()
 hostname = ec2.ec2_name()
-config = { "scope": "batman", "ttl": 30, "host": "127.0.0.1:4001" }
+ttl = 30
+sleep_time = 15
+config = { "scope": "batman", "ttl": ttl, "host": "127.0.0.1:4001" }
 host = ip + ":4001"
 
 # subs
@@ -35,14 +37,13 @@ print cmd
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 except Exception, e:
-	print str(e)
+	syslog.syslog(str(e))
 
 # update leader key
 while True:
 	try:
 		data = { "value": host, "ttl": config["ttl"] }
 		leader_url = "http://%s/v2/stats/leader" % (config["host"])
-		print leader_url
 
 		# test for etcd cluster leader
 		req = urllib2.Request(leader_url)
@@ -50,13 +51,11 @@ while True:
 		out = r.read()
 		j = json.loads(out)
 		test = j['leader']
-		print test
 
 		update_leader_key(data)			
 		syslog.syslog("i am etcd leader. updated leader key.")
 
 	except Exception, e:
-		print str(e)
 		syslog.syslog("i am etcd follower.")
 
-	time.sleep(15)
+	time.sleep(sleep_time)
