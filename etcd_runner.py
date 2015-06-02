@@ -33,18 +33,23 @@ while True:
 	try:
 		data = { "value": host, "ttl": config["ttl"] }
 		leader_url = "http://%s/v2/stats/leader" % (config["host"])
+		print leader_url
 
 		# test for etcd cluster leader
 		req = urllib2.Request(leader_url)
 		r = urllib2.urlopen(req)
 		out = r.read()
+		print out
 		j = json.loads(out)
+		print j
 		test = j['leader']
+		print test
 
 		update_leader_key(data)			
 		syslog.syslog("i am etcd leader. updated leader key.")
 
 	except Exception, e:
+		print str(e)
 		syslog.syslog("i am etcd follower.")
 
 	time.sleep(30)
