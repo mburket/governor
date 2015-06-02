@@ -22,7 +22,7 @@ host = ip + ":4001"
 
 # main
 # run etcd
-cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=%s:4001", "-discovery=%s", "-name=%s", "-peer-addr=%s:7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=%s" ] % (ip, discovery, hostname, ip, data_dir)
+cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-peer-heartbeat-interval=100", "-peer-election-timeout=500", "--data-dir=" + data_dir ]
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 except Exception, e:
