@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 
-import time
-import subprocess
-import urllib2
+import time, subprocess, urllib2, syslog, json
 from urllib import urlencode
-import syslog
-
 from helpers.ec2 import Ec2
 
 ec2 = Ec2()
