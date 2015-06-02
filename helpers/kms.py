@@ -9,7 +9,7 @@ class Kms:
 
 	def decrypt(self, base64_ciphertext):
 		try:
-			res = self.conn.decrypt(base64.decode(base64_ciphertext))
+			res = self.conn.decrypt(base64.b64decode(base64_ciphertext))
 			return res["Plaintext"]
 		except Exception, e:
 			raise e
