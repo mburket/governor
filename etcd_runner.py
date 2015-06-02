@@ -13,7 +13,7 @@ discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = ec2.ec2_ip()
 hostname = ec2.ec2_name()
-config = { "scope": "batman", "ttl": 45, "host": "127.0.0.1:4001" }
+config = { "scope": "batman", "ttl": 30, "host": "127.0.0.1:4001" }
 host = ip + ":4001"
 
 # subs
@@ -48,9 +48,7 @@ while True:
 		req = urllib2.Request(leader_url)
 		r = urllib2.urlopen(req)
 		out = r.read()
-		print out
 		j = json.loads(out)
-		print j
 		test = j['leader']
 		print test
 
@@ -61,4 +59,4 @@ while True:
 		print str(e)
 		syslog.syslog("i am etcd follower.")
 
-	time.sleep(30)
+	time.sleep(15)
