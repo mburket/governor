@@ -12,7 +12,7 @@ ec2 = Ec2()
 
 # vars
 base = "https://discovery.etcd.io/"
-etcd_cluster = "e268485ffc6aece5ac697a28e685f047"
+etcd_cluster = "ae2f573214a397e9d462ad7ebdd4a541"
 discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = ec2.ec2_ip()
@@ -38,6 +38,7 @@ print cmd
 
 try:
 	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	syslog.syslog(stdout)
 except Exception, e:
 	print str(e)
 
