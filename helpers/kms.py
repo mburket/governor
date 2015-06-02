@@ -1,4 +1,5 @@
 from boto import kms
+import base64
 
 # docs: http://boto.readthedocs.org/en/latest/ref/kms.html
 
@@ -6,16 +7,16 @@ class Kms:
 	def __init__(self, config):	
 		self.conn = kms.connect_to_region(config["region"])
 
-	def decrypt(self, ciphertext):
+	def decrypt(self, base64_ciphertext):
 		try:
-			text = self.conn.decrypt(ciphertext)
-			return text			
+			res = self.conn.decrypt(base64.decode(base64_ciphertext))
+			return res["Plaintext"]
 		except Exception, e:
 			raise e
 
 	def encrypt(self, key_id, plaintext):
 		try:
-			ciphertext = self.conn.encrypt(key_id, plaintext)
-			return ciphertext
+			res = self.conn.encrypt(key_id, plaintext)
+			return base64.b64encode(res["CiphertextBlob"])
 		except Exception, e:
 			raise e
