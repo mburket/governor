@@ -80,6 +80,7 @@ try:
 except Exception, e:
 	cmd = [ '/bin/systemctl', 'start', 'etcd' ]
 	subprocess.call(cmd)
+	time.sleep(3)
 
 try:
 	# determine that we are slave
