@@ -18,7 +18,7 @@ class Etcd:
         while True:
             try:
                 url = "http://%s/v2/keys/service/batman/etcd_leader" % (host)
-                res = json.loads(urllib2.urlopen(url, None, self.http_timeout).read())
+                res = json.loads(urllib2.urlopen(url, None, 3).read())
                 self.host = res["node"]["value"]
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
@@ -34,7 +34,7 @@ class Etcd:
 
         while True:
             try:
-                response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
+                response = urllib2.urlopen(self.client_url(path), None, 3).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
                 self.get_etcd_leader(self.etcd_local)                              
