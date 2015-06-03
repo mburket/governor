@@ -13,7 +13,7 @@ class Etcd:
 
     def get_etcd_leader(self, host):
         attempts = 0
-        max_attempts = 1
+        max_attempts = 3
 
         while True:
             try:
