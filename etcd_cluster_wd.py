@@ -11,7 +11,9 @@ try:
 	lines = out.split(os.linesep)
 
 	for l in lines:
-		print l
+		find = l.find('cluster')
+		if find == 0:
+			print l
 
 except Exception, e:
 	raise e
