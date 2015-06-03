@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import subprocess
+import subprocess, os
 
 
 try:
@@ -8,10 +8,10 @@ try:
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	out, err = p.communicate()
 	print out
-		
-	outIter = iter(out)
-	for i in outIter:
-		print i
+	lines = out.split(os.linesep)
+
+	for l in lines:
+		print l
 
 except Exception, e:
 	raise e
