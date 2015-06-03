@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import subprocess, os
+# makes sure etcd cluster is healthy
+
+import subprocess, os, time
 
 stop_cmd = [ '/bin/systemctl', 'stop', 'etcd' ]
 start_cmd = [ '/bin/systemctl', 'start', 'etcd' ]
@@ -17,10 +19,10 @@ try:
 			print l
 			args = l.split(' ')
 			if not args[2] == 'healthy':
-				print 'need to restart'
-			else:
-				print 'healthy'
+				subprocess.call(stop_cmd)
+				time.sleep(1)
+				subprocess.call(start_cmd)
 
 except Exception, e:
-	raise e
+	subprocess.call(start_cmd)
 

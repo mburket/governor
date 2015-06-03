@@ -8,17 +8,6 @@ from socket import gethostname
 
 import syslog
 
-# make sure etcd is running
-try:
-	pids = map(str, subprocess.check_output(["pidof", "etcd"]).split())
-	if isinstance(pids, list):
-		pass
-except Exception, e:
-	cmd = [ '/bin/systemctl', 'start', 'etcd' ]
-	subprocess.call(cmd)
-	time.sleep(3)
-###########################
-
 hostname = gethostname()
 
 os.environ['PATH'] += os.pathsep + '/usr/sbin'
