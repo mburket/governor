@@ -28,8 +28,8 @@ class Etcd:
                 else:           
                     self.host = host
 
-    def get_client_path(self, path, max_attempts=1):
-        attempts = 10
+    def get_client_path(self, path, max_attempts=10):
+        attempts = 0
         response = None
 
         while True:
