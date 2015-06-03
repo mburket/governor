@@ -3,7 +3,7 @@
 
 [Unit]
 Description=Governor Start Script
-After=syslog.target network.target
+After=syslog.target network.target etcd.target
 
 [Service]
 Type=forking
