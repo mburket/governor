@@ -9,6 +9,7 @@ class Etcd:
         self.ttl = config["ttl"]
         self.get_etcd_leader(config["host"])
         self.etcd_local = config["host"]
+        self.http_timeout = 3
 
     def get_etcd_leader(self, host):
         attempts = 0
@@ -17,7 +18,7 @@ class Etcd:
         while True:
             try:
                 url = "http://%s/v2/keys/service/batman/etcd_leader" % (host)
-                res = json.loads(urllib2.urlopen(url).read())
+                res = json.loads(urllib2.urlopen(url, self.http_timeout).read())
                 self.host = res["node"]["value"]
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
@@ -28,12 +29,12 @@ class Etcd:
                     self.host = host
 
     def get_client_path(self, path, max_attempts=1):
-        attempts = 0
+        attempts = 2
         response = None
 
         while True:
             try:
-                response = urllib2.urlopen(self.client_url(path)).read()
+                response = urllib2.urlopen(self.client_url(path), self.http_timeout).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
                 self.get_etcd_leader(self.etcd_local)                              
