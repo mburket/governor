@@ -5,11 +5,11 @@ import helpers.errors
 
 class Etcd:
     def __init__(self, config):
+        self.http_timeout = 3
         self.scope = config["scope"]
         self.ttl = config["ttl"]
         self.get_etcd_leader(config["host"])
-        self.etcd_local = config["host"]
-        self.httptimeout = 3
+        self.etcd_local = config["host"]        
 
     def get_etcd_leader(self, host):
         attempts = 0
@@ -18,7 +18,7 @@ class Etcd:
         while True:
             try:
                 url = "http://%s/v2/keys/service/batman/etcd_leader" % (host)
-                res = json.loads(urllib2.urlopen(url, None, self.httptimeout).read())
+                res = json.loads(urllib2.urlopen(url, None, self.http_timeout).read())
                 self.host = res["node"]["value"]
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
@@ -34,7 +34,7 @@ class Etcd:
 
         while True:
             try:
-                response = urllib2.urlopen(self.client_url(path), None, self.httptimeout).read()
+                response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
                 self.get_etcd_leader(self.etcd_local)                              
