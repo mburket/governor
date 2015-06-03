@@ -10,7 +10,6 @@ import syslog
 
 # make sure etcd is running
 try:
-	# check if we are in restore phase
 	pids = map(str, subprocess.check_output(["pidof", "etcd"]).split())
 	if isinstance(pids, list):
 		pass
@@ -18,10 +17,12 @@ except Exception, e:
 	cmd = [ '/bin/systemctl', 'start', 'etcd' ]
 	subprocess.call(cmd)
 	time.sleep(3)
+###########################
 
 hostname = gethostname()
 
 os.environ['PATH'] += os.pathsep + '/usr/sbin'
+governro_cmd = [ '/bin/systemctl', 'start', 'governor' ]
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
@@ -97,11 +98,9 @@ try:
 				syslog.syslog(err_msg)
 				sns.publish(err_msg)
 				# re-initilize
-				cmd = [ '/bin/systemctl', 'stop', 'governor' ]
-				subprocess.call(cmd)
+				subprocess.call(governro_cmd)
 				rm('/pg_cluster/pgsql/9.4/data/')
-				cmd = [ '/bin/systemctl', 'start', 'governor' ]
-				subprocess.call(cmd)
+				subprocess.call(governro_cmd)
 
 			os.unlink(lock_file)
 
@@ -115,4 +114,4 @@ try:
 	else:
 		print "i am the leader"
 except Exception, e:
-	raise e
+	subprocess.call(governro_cmd)
