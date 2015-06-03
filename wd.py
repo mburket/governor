@@ -71,17 +71,17 @@ def mk_lock_file(lock):
 
 # main
 lock_file = "/tmp/wd.lck"
+# make sure etcd is running
 try:
-	# make sure etcd is running
-	try:
-		# check if we are in restore phase
-		pids = map(str, subprocess.check_output(["pidof", "etcd"]).split())
-		if isinstance(pids, list):
-			pass
-	except Exception, e:
-		cmd = [ '/bin/systemctl', 'start', 'etcd' ]
-		subprocess.call(cmd)
+	# check if we are in restore phase
+	pids = map(str, subprocess.check_output(["pidof", "etcd"]).split())
+	if isinstance(pids, list):
+		pass
+except Exception, e:
+	cmd = [ '/bin/systemctl', 'start', 'etcd' ]
+	subprocess.call(cmd)
 
+try:
 	# determine that we are slave
 	if not etcd.current_leader()["hostname"] == gethostname().split('.')[0]:
 		if not os.path.isfile(lock_file):
