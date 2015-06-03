@@ -29,7 +29,7 @@ class Etcd:
                     self.host = host
 
     def get_client_path(self, path, max_attempts=1):
-        attempts = 2
+        attempts = 10
         response = None
 
         while True:
@@ -43,6 +43,7 @@ class Etcd:
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
                     time.sleep(3)
                 else:
+                    syslog.syslog(str(e))
                     raise e
 
                 attempts += 1
