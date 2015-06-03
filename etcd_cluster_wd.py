@@ -11,17 +11,20 @@ try:
 	cmd = [ '/bin/etcdctl', 'cluster-health' ]
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	out, err = p.communicate()
-	lines = out.split(os.linesep)
-
-	for l in lines:
-		find = l.find('cluster')
-		if find == 0:
-			print l
-			args = l.split(' ')
-			if not args[2] == 'healthy':
-				subprocess.call(stop_cmd)
-				time.sleep(1)
-				subprocess.call(start_cmd)
+	
+	if len(out) == 0:
+		subprocess.call(start_cmd)
+	else:
+		lines = out.split(os.linesep)
+		for l in lines:
+			find = l.find('cluster')
+			if find == 0:
+				print l
+				args = l.split(' ')
+				if not args[2] == 'healthy':
+					subprocess.call(stop_cmd)
+					time.sleep(1)
+					subprocess.call(start_cmd)
 
 except Exception, e:
 	subprocess.call(start_cmd)
