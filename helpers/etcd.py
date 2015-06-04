@@ -8,26 +8,7 @@ class Etcd:
         self.http_timeout = 3
         self.scope = config["scope"]
         self.ttl = config["ttl"]
-        # self.get_etcd_leader(config["host"])
-        self.etcd_local = config["host"]   
         self.host = config["host"]
-
-    def get_etcd_leader(self, host):
-        attempts = 0
-        max_attempts = 3
-
-        while True:
-            try:
-                url = "http://%s/v2/keys/service/batman/etcd_leader" % (host)
-                res = json.loads(urllib2.urlopen(url, None, self.http_timeout).read())
-                self.host = res["node"]["value"]
-                break
-            except (urllib2.HTTPError, urllib2.URLError) as e:
-                attempts += 1
-                if attempts < max_attempts:
-                    time.sleep(3)
-                else:           
-                    self.host = host
 
     def get_client_path(self, path, max_attempts=2):
         attempts = 0
@@ -38,7 +19,6 @@ class Etcd:
                 response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
-                # self.get_etcd_leader(self.etcd_local)                              
 
                 if attempts < max_attempts:                    
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
