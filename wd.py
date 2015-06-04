@@ -11,7 +11,7 @@ import syslog
 hostname = gethostname()
 
 os.environ['PATH'] += os.pathsep + '/usr/sbin'
-governro_cmd = [ '/bin/systemctl', 'start', 'governor' ]
+governor_cmd = [ '/bin/systemctl', 'start', 'governor' ]
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
@@ -87,9 +87,9 @@ try:
 				syslog.syslog(err_msg)
 				sns.publish(err_msg)
 				# re-initilize
-				subprocess.call(governro_cmd)
+				subprocess.call(governor_cmd)
 				rm('/pg_cluster/pgsql/9.4/data/')
-				subprocess.call(governro_cmd)
+				subprocess.call(governor_cmd)
 
 			os.unlink(lock_file)
 
@@ -103,4 +103,4 @@ try:
 	else:
 		print "i am the leader"
 except Exception, e:
-	subprocess.call(governro_cmd)
+	subprocess.call(governor_cmd)
