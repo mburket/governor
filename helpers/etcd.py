@@ -9,7 +9,8 @@ class Etcd:
         self.scope = config["scope"]
         self.ttl = config["ttl"]
         # self.get_etcd_leader(config["host"])
-        self.etcd_local = config["host"]        
+        self.etcd_local = config["host"]   
+        self.host = config["host"]
 
     def get_etcd_leader(self, host):
         attempts = 0
