@@ -8,7 +8,7 @@ class Etcd:
         self.http_timeout = 3
         self.scope = config["scope"]
         self.ttl = config["ttl"]
-        self.get_etcd_leader(config["host"])
+        # self.get_etcd_leader(config["host"])
         self.etcd_local = config["host"]        
 
     def get_etcd_leader(self, host):
@@ -28,7 +28,7 @@ class Etcd:
                 else:           
                     self.host = host
 
-    def get_client_path(self, path, max_attempts=1):
+    def get_client_path(self, path, max_attempts=3):
         attempts = 0
         response = None
 
@@ -37,7 +37,7 @@ class Etcd:
                 response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
-                self.get_etcd_leader(self.etcd_local)                              
+                # self.get_etcd_leader(self.etcd_local)                              
 
                 if attempts < max_attempts:                    
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
