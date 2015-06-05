@@ -4,6 +4,7 @@ import sys, yaml, time, subprocess, os, shutil
 
 from helpers.etcd import Etcd
 from helpers.sns import Sns
+from helpers.kms import Kms
 from socket import gethostname
 
 import syslog
@@ -19,7 +20,8 @@ config = yaml.load(f.read())
 f.close()
 
 etcd = Etcd(config["etcd"])
-sns = Sns(config["sns"])
+kms = Kms(config["kms"])
+sns = Sns(config["sns"], kms)
 
 # check if receiver is running
 def receiver_checker():
@@ -49,7 +51,7 @@ def receiver_checker():
 				status = True
 				return status
 			else:
-				return status						
+				return status
 		except Exception, e:
 			return status
 
@@ -60,7 +62,7 @@ def rm(folder):
 		try:
 			if os.path.isfile(file_path):
 				os.unlink(file_path)
-			elif os.path.isdir(file_path): 
+			elif os.path.isdir(file_path):
 				shutil.rmtree(file_path)
 		except Exception, e:
 			raise e
@@ -69,7 +71,7 @@ def rm(folder):
 def mk_lock_file(lock):
     f = open(lock, 'w')
     f.write('')
-    f.close()			
+    f.close()
 
 # main
 lock_file = "/tmp/wd.lck"
@@ -82,7 +84,7 @@ try:
 
 			# determine if reciver is not running
 			receiver_checker_status = receiver_checker()
-			if receiver_checker_status == False:		
+			if receiver_checker_status == False:
 				# stop governor cleanup the data dir and start the governor
 				err_msg = "slave is out of sync on %s, re-initilizing" % (hostname)
 				syslog.syslog(err_msg)
