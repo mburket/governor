@@ -36,7 +36,7 @@ postgresql = Postgresql(config["postgresql"], kms)
 config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
-sns = Sns(config["sns"])
+sns = Sns(config["sns"], kms)
 sqs = Sqs(config["sqs"])
 ha = Ha(postgresql, etcd, rt53, sns, sqs, hostname)
 
