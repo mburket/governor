@@ -9,6 +9,7 @@ from helpers.ec2 import Ec2
 from helpers.rt53 import Rt53
 from helpers.sns import Sns
 from helpers.sqs import Sqs
+from helpers.kms import Kms
 
 import syslog
 from socket import gethostname
@@ -24,11 +25,13 @@ f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
 
+# kms is needed to decryot config
+kms = Kms(config["kms"])
 # configure the postgres
 hostname = gethostname()
 config["postgresql"]["name"] = hostname.split('.')[0]
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
-postgresql = Postgresql(config["postgresql"])
+postgresql = Postgresql(config["postgresql"], kms)
 
 config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])
