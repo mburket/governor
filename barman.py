@@ -4,12 +4,14 @@ import sys, yaml, time, subprocess, os, shutil, json
 
 from helpers.sqs import Sqs
 from helpers.sns import Sns
+from helpers.kms import Kms
 
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
 
-sns = Sns(config["sns"])
+kms = Kms(config["kms"])
+sns = Sns(config["sns"], kms)
 sqs = Sqs(config["sqs"])
 
 try:
