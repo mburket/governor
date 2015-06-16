@@ -1,14 +1,21 @@
 #!/usr/bin/env python
 
-import time, subprocess, urllib2, syslog, json
+import time, subprocess, urllib2, syslog, json, sys, yaml
 from urllib import urlencode
 from helpers.ec2 import Ec2
+from helpers.kms import Kms
 
 ec2 = Ec2()
 
+f = open(sys.argv[1], "r")
+config = yaml.load(f.read())
+f.close()
+
+kms = Kms(config["kms"])
+
 # vars
 base = "https://discovery.etcd.io/"
-etcd_cluster = "75f7a0de00b90fadd52a75250e3bcabc"
+etcd_cluster = kms.decrypt(config["etcd"]["cluster"])
 discovery = base + etcd_cluster
 data_dir = "/var/lib/etcd/default.etcd/"
 ip = ec2.ec2_ip()
@@ -25,7 +32,7 @@ def update_leader_key(data):
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(path, data=urlencode(data).replace("false", "False"))
 		request.get_method = lambda: 'PUT'
-		opener.open(request)		
+		opener.open(request)
 	except Exception, e:
 		raise e
 
@@ -51,7 +58,7 @@ while True:
 		j = json.loads(out)
 		test = j['leader']
 
-		update_leader_key(data)			
+		update_leader_key(data)
 		syslog.syslog("i am etcd leader. updated leader key.")
 
 	except Exception, e:
