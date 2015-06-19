@@ -3,7 +3,7 @@ rt53:
   zone: accint.co
   region: us-east-1
   stack: test3
-  ttl: 15
+  ttl: 5
 sns:
   region: us-east-1
   arn: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKwAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAACHMIGEBgkqhkiG9w0BBwagdzB1AgEAMHAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM+18y+jVWW1qJfItRAgEQgEOU0pUeZaclZNlHeqh2MTZeDtZ8rNCE3zbY8Qo7bhjqnI6cZOueXNNQh4XXwByAKCAOcPtX4Li/gDnr5kNXiSwLLVea
