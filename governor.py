@@ -31,7 +31,7 @@ kms = Kms(config["kms"])
 hostname = gethostname()
 config["postgresql"]["name"] = hostname.split('.')[0]
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
-postgresql = Postgresql(config["postgresql"], kms)
+postgresql = Postgresql(config["postgresql"], kms, hostname)
 
 config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])

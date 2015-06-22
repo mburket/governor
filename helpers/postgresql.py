@@ -5,12 +5,14 @@ from urlparse import urlparse
 
 class Postgresql:
 
-    def __init__(self, config, kms):
+    def __init__(self, config, kms, hostname):
         self.name = config["name"]
         self.host, self.port = config["listen"].split(":")
         self.data_dir = config["data_dir"]
         self.replication = config["replication"]
         self.psql = config["psql"]
+        self.barman = config["barman"]
+        self.hostname = hostname
 
         self.config = config
 
@@ -113,6 +115,9 @@ class Postgresql:
         options = "-c listen_addresses=%s -c port=%s" % (self.host, self.port)
         for setting, value in self.config["parameters"].iteritems():
             options += " -c \"%s=%s\"" % (setting, value)
+
+        # add archive_command to archive to barman
+        options += " -c archive_command=\"rsync -a %p barman@%s:%s/%f\"" % (self.barman, self.hostname)
         return options
 
     def is_healthy(self):
