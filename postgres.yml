@@ -44,4 +44,4 @@ postgresql:
     ssl_ciphers: "HIGH"
     ssl_cert_file: "/etc/pki/tls/certs/star_myaccolade_com.crt"
     ssl_key_file: "/etc/pki/tls/private/star_myaccolade_com.key"
-    synchronous_standby_names: "'databased01.dbha.aimetgtest.local'"
+    synchronous_standby_names: "'*'"
