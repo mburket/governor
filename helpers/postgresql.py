@@ -117,7 +117,7 @@ class Postgresql:
             options += " -c \"%s=%s\"" % (setting, value)
 
         # add archive_command to archive to barman
-        options += " -c archive_command=\"/bin/rsync -a %p barman@" + self.barman +  ":/pg_cluster/barman/" + self.hostname + "/incoming/%f && cp %p /pg_cluster/pgsql/9.4/data/wal_archive/%f\""
+        options += " -c archive_command=\"/bin/rsync -a %p barman@" + self.barman +  ":/pg_cluster/barman/" + self.hostname + "/incoming/%f\""
         return options
 
     def is_healthy(self):
