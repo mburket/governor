@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-import sys, yaml, time, subprocess, os, shutil
+import sys, yaml, time, subprocess, os, shutil, syslog, tarfile
 
 from helpers.etcd import Etcd
 from helpers.sns import Sns
 from helpers.kms import Kms
 from socket import gethostname
-
-import syslog
 
 hostname = gethostname()
 
@@ -22,6 +20,15 @@ f.close()
 etcd = Etcd(config["etcd"])
 kms = Kms(config["kms"])
 sns = Sns(config["sns"], kms)
+
+# vars
+data_dir = "/pg_cluster/pgsql/9.4/data/"
+archive_file = "/pg_cluster/pgsql/9.4/data.tar.gz"
+
+# make a tar.gz backup of a directory
+def make_tarfile(output_filename, source_dir):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
 
 # check if receiver is running
 def receiver_checker():
@@ -91,7 +98,14 @@ try:
 				sns.publish(err_msg)
 				# re-initilize
 				subprocess.call(governor_stop_cmd)
-				rm('/pg_cluster/pgsql/9.4/data/')
+				# backup the file before blowing away the data dir
+				try:
+					os.unlink(archive_file)
+					make_tarfile(archive_file, data_dir)
+				except Exception as e:
+					make_tarfile(archive_file, data_dir)
+
+				rm(data_dir)
 				subprocess.call(governor_start_cmd)
 
 			os.unlink(lock_file)
