@@ -45,3 +45,13 @@ postgresql:
     ssl_cert_file: "/etc/pki/tls/certs/star_myaccolade_com.crt"
     ssl_key_file: "/etc/pki/tls/private/star_myaccolade_com.key"
     synchronous_standby_names: "*"
+    # performance optimization
+    checkpoint_segments: "128"
+    checkpoint_completion_target: "0.8"
+    wal_buffers: "16MB"
+    log_checkpoints: "on"
+    log_connections: "on"
+    log_disconnections: "on"
+    shared_buffers: "1800MB"
+    work_mem: "2MB"
+    maintenance_work_mem: "250MB"
