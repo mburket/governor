@@ -20,7 +20,7 @@ etcd:
 postgresql:
   port: 5432
   data_dir: /pg_cluster/pgsql/9.4/data
-  barman: barmane01.prod-dbha.aimetgtest.local
+  barman: barmane01.prod-dbha.accolade.local
   replication:
     username: replicator
     password: CiCjiFwUYRL/VgaCUxwEE8sdgX2XfJxS2CRTF97KkeCUzhKWAQEBAgB4o4hcFGES/1YGglMcBBPLHYF9l3ycUtgkUxfeypHglM4AAABtMGsGCSqGSIb3DQEHBqBeMFwCAQAwVwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyKMm6LhPePpY6GcbQCARCAKt8pnpluoejHX4wFgOqtSmH93P49xtLvrI4fNkopnPRJQVYezzELYVA3jQ==
