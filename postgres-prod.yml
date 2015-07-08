@@ -55,3 +55,4 @@ postgresql:
     shared_buffers: "1800MB"
     work_mem: "2MB"
     maintenance_work_mem: "250MB"
+    ssl_renegotiation_limit: "0"
