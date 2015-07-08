@@ -27,7 +27,7 @@ postgresql:
     network: 10.0.0.0/16
   psql:
     username: postgres
-    password: CiCjiFwUYRL/VgaCUxwEE8sdgX2XfJxS2CRTF97KkeCUzhKWAQEBAgB4o4hcFGES/1YGglMcBBPLHYF9l3ycUtgkUxfeypHglM4AAABtMGsGCSqGSIb3DQEHBqBeMFwCAQAwVwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyBlYMVc7cbU6K4qygCARCAKpATDq8BsKvR72P/vUPfMlD2q3yEFi2IfTT1tiFskHbYPkhAsUGm5IbRMQ==
+    password: CiCjiFwUYRL/VgaCUxwEE8sdgX2XfJxS2CRTF97KkeCUzhKPAQEBAgB4o4hcFGES/1YGglMcBBPLHYF9l3ycUtgkUxfeypHglM4AAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzCA2ECjcSdG2zNG4wCARCAI9uHBDb0Q4iAkxT4RZWg3CJnQbABtiNGfzbSZqsEUc+LLIQF
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:
