@@ -5,6 +5,7 @@ import sys, yaml, time, subprocess, os, shutil, syslog, tarfile
 from helpers.etcd import Etcd
 from helpers.sns import Sns
 from helpers.kms import Kms
+from helpers.postgresql import Postgresql
 from socket import gethostname
 
 hostname = gethostname()
@@ -20,6 +21,7 @@ f.close()
 etcd = Etcd(config["etcd"])
 kms = Kms(config["kms"])
 sns = Sns(config["sns"], kms)
+postgresql = Postgresql(config["postgresql"], kms, hostname)
 
 # vars
 data_dir = "/pg_cluster/pgsql/9.4/data/"
@@ -119,5 +121,6 @@ try:
 
 	else:
 		print "i am the leader"
+        query = "select * from pg_stat_replication;"
 except Exception, e:
 	subprocess.call(governor_start_cmd)
