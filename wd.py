@@ -5,10 +5,11 @@ import sys, yaml, time, subprocess, os, shutil, syslog, tarfile
 from helpers.etcd import Etcd
 from helpers.sns import Sns
 from helpers.kms import Kms
+from helpers.ec2 import Ec2
 from helpers.postgresql import Postgresql
 from socket import gethostname
 
-hostname = gethostname()
+
 
 os.environ['PATH'] += os.pathsep + '/usr/sbin'
 governor_start_cmd = [ '/bin/systemctl', 'start', 'governor' ]
@@ -21,6 +22,12 @@ f.close()
 etcd = Etcd(config["etcd"])
 kms = Kms(config["kms"])
 sns = Sns(config["sns"], kms)
+# configure the postgres
+ec2 = Ec2()
+our_ip = ec2.ec2_ip()
+hostname = gethostname()
+config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
+config["postgresql"]["name"] = hostname.split('.')[0]
 postgresql = Postgresql(config["postgresql"], kms, hostname)
 
 # vars
