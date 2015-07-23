@@ -106,7 +106,7 @@ try:
 					# make_tarfile(archive_file, data_dir)
 				except Exception as e:
 					# make_tarfile(archive_file, data_dir)
-                    pass
+                    			pass
 
 				rm(data_dir)
 				subprocess.call(governor_start_cmd)
