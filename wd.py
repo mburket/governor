@@ -103,9 +103,10 @@ try:
 				# backup the file before blowing away the data dir
 				try:
 					os.unlink(archive_file)
-					make_tarfile(archive_file, data_dir)
+					# make_tarfile(archive_file, data_dir)
 				except Exception as e:
-					make_tarfile(archive_file, data_dir)
+					# make_tarfile(archive_file, data_dir)
+                    pass
 
 				rm(data_dir)
 				subprocess.call(governor_start_cmd)
