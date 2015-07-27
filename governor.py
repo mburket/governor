@@ -81,7 +81,11 @@ else:
     postgresql.start()
 
 while True:
-    syslog.syslog(str(ha.run_cycle()))
+    try:
+        syslog.syslog(str(ha.run_cycle()))
+    except Exception as e:
+        postgresql.stop()
+        break
 
     # create replication slots
     if postgresql.is_leader():
@@ -89,6 +93,8 @@ while True:
             nodes = etcd.get_client_path("/members?recursive=true")["node"]["nodes"]
         except Exception as e:
             postgresql.stop()
+            break
+            
         for node in nodes:
             member = node["key"].split('/')[-1]
             if member != postgresql.name:
