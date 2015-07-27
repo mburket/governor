@@ -57,20 +57,22 @@ except Exception, e:
 # update leader key
 while True:
 	try:
-		data = { "value": host, "ttl": config["ttl"] }
-		leader_url = "http://%s/v2/stats/leader" % (config["host"])
-
-		# test for etcd cluster leader
-		req = urllib2.Request(leader_url)
-		r = urllib2.urlopen(req)
-		out = r.read()
-		j = json.loads(out)
-		test = j['leader']
-
-		update_leader_key(data)
-		syslog.syslog("i am etcd leader. updated leader key.")
+		pass
+		# data = { "value": host, "ttl": config["ttl"] }
+		# leader_url = "http://%s/v2/stats/leader" % (config["host"])
+		#
+		# # test for etcd cluster leader
+		# req = urllib2.Request(leader_url)
+		# r = urllib2.urlopen(req)
+		# out = r.read()
+		# j = json.loads(out)
+		# test = j['leader']
+		#
+		# update_leader_key(data)
+		# syslog.syslog("i am etcd leader. updated leader key.")
 
 	except Exception, e:
-		syslog.syslog("i am etcd follower.")
+		pass
+		# syslog.syslog("i am etcd follower.")
 
 	time.sleep(sleep_time)
