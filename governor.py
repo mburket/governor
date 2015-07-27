@@ -85,8 +85,8 @@ while True:
         syslog.syslog(str(ha.run_cycle()))
     except Exception as e:
         syslog.syslog(str(e))
-        syslog.syslog("Shutting down postgresql!")
-        postgresql.stop()
+        # syslog.syslog("Shutting down postgresql!")
+        # postgresql.stop()
         break
 
     # create replication slots
@@ -95,8 +95,8 @@ while True:
             nodes = etcd.get_client_path("/members?recursive=true")["node"]["nodes"]
         except Exception as e:
             syslog.syslog(str(e))
-            syslog.syslog("Shutting down postgresql!")            
-            postgresql.stop()
+            # syslog.syslog("Shutting down postgresql!")
+            # postgresql.stop()
             break
 
         for node in nodes:
