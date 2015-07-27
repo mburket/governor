@@ -84,6 +84,7 @@ while True:
     try:
         syslog.syslog(str(ha.run_cycle()))
     except Exception as e:
+        syslog.syslog(str(e))
         postgresql.stop()
         break
 
@@ -92,9 +93,10 @@ while True:
         try:
             nodes = etcd.get_client_path("/members?recursive=true")["node"]["nodes"]
         except Exception as e:
+            syslog.syslog(str(e))
             postgresql.stop()
             break
-            
+
         for node in nodes:
             member = node["key"].split('/')[-1]
             if member != postgresql.name:
