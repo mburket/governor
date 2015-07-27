@@ -18,7 +18,7 @@ class Etcd:
             try:
                 response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
                 break
-            except (Exception) as e:
+            except Exception as e:
 
                 syslog.syslog(str(e))
                 if attempts < max_attempts:
