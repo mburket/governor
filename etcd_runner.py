@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 
-import time, subprocess, urllib2, json, sys, yaml, logging
-import syslog
+import time, subprocess, urllib2, syslog, json, sys, yaml
 from urllib import urlencode
 from helpers.ec2 import Ec2
 from helpers.kms import Kms
-
-# logging conf
-handler = logging.handlers.SysLogHandler()
-logger = logging.getLogger('etcd')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
 
 ec2 = Ec2()
 
@@ -50,11 +43,10 @@ cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-disco
 try:
 	process = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 	# log etcd
-	logger.info(process.stdout)
-	logger.error(process.stderr)
+	# syslog.syslog(process.stdout)
+	# syslog.syslog(process.stderr)
 except Exception, e:
-	logger.error(str(e))
-	# syslog.syslog(str(e))
+	syslog.syslog(str(e))
 
 # # update leader key
 # while True:
