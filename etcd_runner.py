@@ -5,6 +5,13 @@ from urllib import urlencode
 from helpers.ec2 import Ec2
 from helpers.kms import Kms
 
+import logging
+
+handler = logging.handlers.SysLogHandler()
+logger = logging.getLogger('etcd')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+
 ec2 = Ec2()
 
 f = open(sys.argv[1], "r")
@@ -41,7 +48,9 @@ def update_leader_key(data):
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-data-dir=" + data_dir ]
 
 try:
-	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	process = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	logger.error(process.stderr)
+	logger.info(process.stdout)
 except Exception, e:
 	syslog.syslog(str(e))
 
