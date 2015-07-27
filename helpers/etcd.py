@@ -10,7 +10,7 @@ class Etcd:
         self.ttl = config["ttl"]
         self.host = config["host"]
 
-    def get_client_path(self, path, max_attempts=2):
+    def get_client_path(self, path, max_attempts=3):
         attempts = 0
         response = None
 
@@ -20,9 +20,9 @@ class Etcd:
                 break
             except (urllib2.HTTPError, urllib2.URLError) as e:
 
-                if attempts < max_attempts:                    
+                if attempts < max_attempts:
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
-                    time.sleep(3)
+                    time.sleep(5)
                 else:
                     raise e
 

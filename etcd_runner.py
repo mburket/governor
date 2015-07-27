@@ -41,27 +41,30 @@ def update_leader_key(data):
 cmd = [ "/bin/etcd", "-bind-addr=0.0.0.0:4001", "-addr=" + ip + ":4001", "-discovery=" + discovery, "-name=" + hostname, "-peer-addr=" + ip + ":7001", "-peer-bind-addr=0.0.0.0:7001", "-data-dir=" + data_dir ]
 
 try:
-	subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	proc = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	# log etcd
+	syslog.syslog(proc.stdout)
+	syslog.syslog(proc.stderr)
 except Exception, e:
 	syslog.syslog(str(e))
 
-# update leader key
-while True:
-	try:
-		data = { "value": host, "ttl": config["ttl"] }
-		leader_url = "http://%s/v2/stats/leader" % (config["host"])
-
-		# test for etcd cluster leader
-		req = urllib2.Request(leader_url)
-		r = urllib2.urlopen(req)
-		out = r.read()
-		j = json.loads(out)
-		test = j['leader']
-
-		update_leader_key(data)
-		syslog.syslog("i am etcd leader. updated leader key.")
-
-	except Exception, e:
-		syslog.syslog("i am etcd follower.")
-
-	time.sleep(sleep_time)
+# # update leader key
+# while True:
+# 	try:
+# 		data = { "value": host, "ttl": config["ttl"] }
+# 		leader_url = "http://%s/v2/stats/leader" % (config["host"])
+#
+# 		# test for etcd cluster leader
+# 		req = urllib2.Request(leader_url)
+# 		r = urllib2.urlopen(req)
+# 		out = r.read()
+# 		j = json.loads(out)
+# 		test = j['leader']
+#
+# 		update_leader_key(data)
+# 		syslog.syslog("i am etcd leader. updated leader key.")
+#
+# 	except Exception, e:
+# 		syslog.syslog("i am etcd follower.")
+#
+# 	time.sleep(sleep_time)

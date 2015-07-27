@@ -46,7 +46,7 @@ class Ha:
                                 self.rt53.update()
                                 # publish message to SNS
                                 sns_msg = "leader lock changed to %s" % (self.hostname)
-                                self.sns.publish(sns_msg) 
+                                self.sns.publish(sns_msg)
                                 # publish a SQS
                                 self.sqs.send(self.hostname)
                                 return "promoted self to leader by acquiring session lock"
@@ -99,4 +99,4 @@ class Ha:
     def run(self):
         while True:
             self.run_cycle()
-            time.sleep(10)
+            time.sleep(5)
