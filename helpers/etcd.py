@@ -18,8 +18,9 @@ class Etcd:
             try:
                 response = urllib2.urlopen(self.client_url(path), None, self.http_timeout).read()
                 break
-            except (urllib2.HTTPError, urllib2.URLError) as e:
+            except (Exception) as e:
 
+                syslog.syslog(str(e))
                 if attempts < max_attempts:
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
                     time.sleep(5)
