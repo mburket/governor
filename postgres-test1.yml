@@ -14,7 +14,7 @@ kms:
   region: us-east-1
 etcd:
   scope: batman
-  ttl: 15
+  ttl: 20
   host: 127.0.0.1:4001
   cluster: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKnAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAw7i1u8lhqTFsjdFkwCARCAO6yhb6wz6qhLJYkNgouDvfqhnISN6E5EBfa0v/W/dIj9ZjcsDFe8MVdAE75csNqoW0BWZsYQgwDfLqCm
 postgresql:
