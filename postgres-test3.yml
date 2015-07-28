@@ -1,4 +1,4 @@
-loop_wait: 10
+loop_wait: 5
 rt53:
   zone: accint.co
   region: us-east-1
@@ -54,4 +54,4 @@ postgresql:
     log_disconnections: "on"
     shared_buffers: "1800MB"
     work_mem: "2MB"
-    maintenance_work_mem: "250MB"    
+    maintenance_work_mem: "250MB"

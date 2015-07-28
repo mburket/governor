@@ -1,4 +1,4 @@
-loop_wait: 10
+loop_wait: 5
 rt53:
   zone: accint.co
   region: us-east-1
