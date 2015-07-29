@@ -10,7 +10,7 @@ class Etcd:
         self.ttl = config["ttl"]
         self.host = config["host"]
 
-    def get_client_path(self, path, max_attempts=3):
+    def get_client_path(self, path, max_attempts=5):
         attempts = 0
         response = None
 
