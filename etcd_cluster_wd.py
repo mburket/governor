@@ -33,6 +33,6 @@ try:
 					restart(err_msg)
 
 except Exception, e:
-	pass
+	syslog.syslog("Exception occured running the test, ignoring...")
 	# err_msg = "genral exception, restarting..."
 	# restart(err_msg)
