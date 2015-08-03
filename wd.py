@@ -56,8 +56,8 @@ def receiver_checker():
 				find = cmdline.find(reciever_cmd_str)
 				if find == 0:
 					status = True
-					break
 					return status
+                    break
 
 	except Exception, e:
 		try:
@@ -100,7 +100,7 @@ try:
 
 			# determine if reciver is not running
 			receiver_checker_status = receiver_checker()
-			if receiver_checker_status == False:
+			if receiver_checker_status == False receiver_checker_status == None:
 				# stop governor cleanup the data dir and start the governor
 				err_msg = "slave is out of sync on %s, re-initilizing" % (hostname)
 				syslog.syslog(err_msg)
