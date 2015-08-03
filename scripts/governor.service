@@ -15,5 +15,7 @@ Environment=PGDATA=/pg_cluster/pgsql/9.4/data/
 ExecStart=/bin/sh /var/lib/pgsql/governor/scripts/governor.sh
 ExecStopPost=/usr/pgsql-9.4/bin/pg_ctl stop -D ${PGDATA} -s -m fast
 
+Nice=-5
+
 [Install]
 WantedBy=multi-user.target
