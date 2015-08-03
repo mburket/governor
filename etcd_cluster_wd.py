@@ -2,13 +2,14 @@
 
 # makes sure etcd cluster is healthy
 
-import subprocess, os, time
+import subprocess, os, time, syslog
 
 stop_cmd = [ '/bin/systemctl', 'stop', 'etcd' ]
 start_cmd = [ '/bin/systemctl', 'start', 'etcd' ]
 
 
-def restart():
+def restart(msg):
+	syslog.syslog(msg)
 	subprocess.call(stop_cmd)
 	time.sleep(1)
 	subprocess.call(start_cmd)
@@ -19,7 +20,8 @@ try:
 	out, err = p.communicate()
 
 	if len(out) == 0:
-		restart()
+		err_msg = "etcd not running restarting..."
+		restart(err_msg)
 	else:
 		lines = out.split(os.linesep)
 		for l in lines:
@@ -27,8 +29,8 @@ try:
 			if find == 0:
 				args = l.split(' ')
 				if not args[2] == 'healthy':
-					restart()
+					err_msg = "etcd cluster is not healthy restarting..."
+					restart(err_msg)
 
 except Exception, e:
 	restart()
-
