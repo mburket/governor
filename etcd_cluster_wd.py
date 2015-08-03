@@ -33,4 +33,6 @@ try:
 					restart(err_msg)
 
 except Exception, e:
-	restart()
+	pass
+	# err_msg = "genral exception, restarting..."
+	# restart(err_msg)
