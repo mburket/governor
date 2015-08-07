@@ -10,7 +10,7 @@ class Etcd:
         self.ttl = config["ttl"]
         self.host = config["host"]
 
-    def get_client_path(self, path, max_attempts=5):
+    def get_client_path(self, path, max_attempts=12):
         attempts = 0
         response = None
 
@@ -23,7 +23,7 @@ class Etcd:
                 syslog.syslog(str(e))
                 if attempts < max_attempts:
                     syslog.syslog("Failed to return %s, trying again. (%s of %s)" % (path, attempts, max_attempts))
-                    time.sleep(5)
+                    time.sleep(10)
                 else:
                     raise e
 
