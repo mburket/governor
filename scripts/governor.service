@@ -6,7 +6,7 @@ Description=Governor Start Script
 After=syslog.target network.target etcd.target
 
 [Service]
-Type=forking
+# Type=forking
 User=postgres
 Group=postgres
 
