@@ -6,6 +6,11 @@ from helpers.postgresql import Postgresql
 from helpers.kms import Kms
 from helpers.ec2 import Ec2
 
+# add system path
+psql_bin_path = "/usr/pgsql-9.4/bin"
+os.environ['PATH'] += os.pathsep + psql_bin_path
+
+# read the config
 f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
