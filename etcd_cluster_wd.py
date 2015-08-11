@@ -14,6 +14,10 @@ def restart(msg):
 	time.sleep(1)
 	subprocess.call(start_cmd)
 
+def check_record_ttl(ttl):
+	# url: curl http://127.0.0.1:4001/v2/keys/service/batman/leader
+	pass
+
 try:
 	cmd = [ '/bin/etcdctl', 'cluster-health' ]
 	p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -30,6 +34,7 @@ try:
 				args = l.split(' ')
 				if not args[2] == 'healthy':
 					err_msg = "etcd cluster is not healthy restarting..."
+					syslog.syslog(err_msg)
 					restart(err_msg)
 
 except Exception, e:
