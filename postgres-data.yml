@@ -1,0 +1,57 @@
+loop_wait: 10
+rt53:
+  zone: accint.co
+  region: us-east-1
+  stack: data
+  ttl: 5
+sns:
+  region: us-east-1
+  arn: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKvAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAACGMIGDBgkqhkiG9w0BBwagdjB0AgEAMG8GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxAj9R6vch78pb6JIAgEQgEI4n7E0Bu0jCGWxY7E0vyjNUg2unVT+KEoQ/oeOiQaF58LsiXzA+qyyJy0D5WLO5ybnuNrRDU+GBBcSqZmNcwl4mAA=
+sqs:
+  region: us-east-1
+  name: barman-data-queue
+kms:
+  region: us-east-1
+etcd:
+  scope: batman
+  ttl: 15
+  host: 127.0.0.1:4001
+  cluster: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKnAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAw251ZP8FPq0e877bECARCAO4l8GlLRb+YMol4DCzKZW0XvefayzNSKuKQckZAfAaL1T6xJSydAYBu/cYz5WQyJKUd+SUNGRsFr/FP5
+postgresql:
+  port: 5432
+  data_dir: /pg_cluster/pgsql/9.4/data
+  barman: barmane01.data.aimetgtest.local
+  replication:
+    username: replicator
+    password: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKPAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyXhRNdWNGdYT7x6x4CARCAIyAKdtJ/26W/GYBtdecyfYdOx/bv+a4Jvsm4+zU4N9eL4Soz
+    network: 10.0.0.0/16
+  psql:
+    username: postgres
+    password: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKPAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAw++Q29hgrMMUEtxZgCARCAI6h3zP5+dHI04mtOQE64aQVxMcJOYJrinQ5/uoKdZe3JI83x
+  #recovery_conf:
+    #restore_command: cp ../wal_archive/%f %p
+  parameters:
+    archive_mode: "on"
+    wal_level: hot_standby
+    # archive_command: mkdir -p /pg_cluster/pgsql/9.4/data/wal_archive && cp %p /pg_cluster/pgsql/9.4/data/wal_archive/%f
+    max_wal_senders: 5
+    wal_keep_segments: 8
+    archive_timeout: 1800s
+    max_replication_slots: 5
+    hot_standby: "on"
+    ssl: "on"
+    # ssl_ciphers: "HIGH:\!aNULL:\!MD5"
+    ssl_ciphers: "HIGH"
+    ssl_cert_file: "/etc/pki/tls/certs/star_myaccolade_com.crt"
+    ssl_key_file: "/etc/pki/tls/private/star_myaccolade_com.key"
+    synchronous_standby_names: "*"
+    # performance optimization
+    checkpoint_segments: "128"
+    checkpoint_completion_target: "0.8"
+    wal_buffers: "16MB"
+    log_checkpoints: "on"
+    log_connections: "on"
+    log_disconnections: "on"
+    shared_buffers: "1800MB"
+    work_mem: "2MB"
+    maintenance_work_mem: "250MB"
