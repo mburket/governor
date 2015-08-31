@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import subprocess
-
+import re
 
 cmd = [ "barman", "list-backup", "all" ]
 try:
@@ -8,8 +8,14 @@ try:
     out, err = p.communicate()
     if len(err) > 0:
         raise Exception(str(err))
-    for i in out:
-        print i
+    # print out
+    it = iter(out.splitlines())
+    for i in it:
+        # print i
+        if "FAILED" in i:
+            args = re.split('\s+', i)
+            cmd = [ "barman", "delete", args[0], args[1] ]
+            subprocess.call(cmd)
 except Exception as e:
     print str(e)
     raise e
