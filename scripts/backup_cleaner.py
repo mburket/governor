@@ -8,7 +8,8 @@ try:
     out, err = p.communicate()
     if len(err) > 0:
         raise Exception(str(err))
-    print out
+    for i in out:
+        print i
 except Exception as e:
     print str(e)
     raise e
