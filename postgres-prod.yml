@@ -56,3 +56,4 @@ postgresql:
     work_mem: "2MB"
     maintenance_work_mem: "250MB"
     ssl_renegotiation_limit: "0"
+    max_connections: "150"
