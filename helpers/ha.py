@@ -11,11 +11,13 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 class Ha:
-    def __init__(self, state_handler, etcd, rt53, sns):
+    def __init__(self, state_handler, etcd, rt53, sns, sqs, hostname):
         self.state_handler = state_handler
         self.etcd = etcd
         self.rt53 = rt53
         self.sns = sns
+        self.sqs = sqs
+        self.hostname = hostname
 
     def acquire_lock(self):
         return self.etcd.attempt_to_acquire_leader(self.state_handler.name)
@@ -43,7 +45,10 @@ class Ha:
                                 # update DNS
                                 self.rt53.update()
                                 # publish message to SNS
-                                self.sns.publish('leader lock changed.')                                
+                                sns_msg = "leader lock changed to %s" % (self.hostname)
+                                self.sns.publish(sns_msg)
+                                # publish a SQS
+                                self.sqs.send(self.hostname)
                                 return "promoted self to leader by acquiring session lock"
 
                             return "acquired session lock as a leader"
@@ -94,4 +99,4 @@ class Ha:
     def run(self):
         while True:
             self.run_cycle()
-            time.sleep(10)
+            time.sleep(5)

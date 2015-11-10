@@ -2,32 +2,32 @@ loop_wait: 5
 rt53:
   zone: accint.co
   region: us-east-1
-  stack: dbha
+  stack: test3
   ttl: 5
 sns:
   region: us-east-1
-  arn: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRK1AQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAACMMIGJBgkqhkiG9w0BBwagfDB6AgEAMHUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMKjTfjrfpNkFamWiLAgEQgEh2BMFqmxII20te4waqct4LP7pNOeFmtQATYH+GATU8Zd/RtYGY7a0+ezCktlnuP5c80s8TnOglGeCs8rKpXOMV3B8l2jAf7Z4=
+  arn: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKwAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAACHMIGEBgkqhkiG9w0BBwagdzB1AgEAMHAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM+18y+jVWW1qJfItRAgEQgEOU0pUeZaclZNlHeqh2MTZeDtZ8rNCE3zbY8Qo7bhjqnI6cZOueXNNQh4XXwByAKCAOcPtX4Li/gDnr5kNXiSwLLVea
 sqs:
   region: us-east-1
-  name: barman-dbha-queue
+  name: barman-test3-queue
 kms:
   region: us-east-1
 etcd:
   scope: batman
   ttl: 120
   host: 127.0.0.1:4001
-  cluster: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKnAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzlT4TQ5Wd2fdNmSF4CARCAOzDnf0ZtBQgKHzj4I1Jz31OZdl7CjV47VDAqUVfpzfUD9cUdFNg1Me5Uvfh/6Yi8v9XuqiNh/XTOz8+M
+  cluster: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKnAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyXMOG5CxpzonGQrZkCARCAO0zgVgbeEy8sA3QMykWLu933l5pv+UOSTNc4n/wdx9QtwPTfh0/oyZZ895Jowg+aCTv+X24PjiWW94w4
 postgresql:
   port: 5432
   data_dir: /pg_cluster/pgsql/9.4/data
-  barman: barmane01.dbha.aimetgtest.local
+  barman: barmane01.test3.aimetgtest.local
   replication:
     username: replicator
-    password: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKPAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwcna2ujCxJG9kGUBsCARCAIyovoWF4mVH0efzV3vvSVmTAjjf8qPIJjjvN8hFpZWp0iLY0
+    password: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKPAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzZNqNzQaEovVReXPkCARCAIy8JQXmQwzU+QOJpvoEBOprGNYGF8cwvsJJo0a6gOe9MFnse
     network: 10.0.0.0/16
   psql:
     username: postgres
-    password: CiDTL6KssJwlRfuOHRpWA1WfkrfGMh5Vl/tsnl+1MTUlFRKVAQEBAgB40y+irLCcJUX7jh0aVgNVn5K3xjIeVZf7bJ5ftTE1JRUAAABsMGoGCSqGSIb3DQEHBqBdMFsCAQAwVgYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxoIdq11UtE33wsyf8CARCAKeMi1W7a1wOsbGgQ3E/TzOsJSq/sySrjUhK3SGlk/Dadx6NJ9+yAVow7
+    password: CiA6lEmKEacJQOexR9xqeCah/47vZTBfJarR6C+Zi0UZbRKPAQEBAgB4OpRJihGnCUDnsUfcangmof+O72UwXyWq0egvmYtFGW0AAABmMGQGCSqGSIb3DQEHBqBXMFUCAQAwUAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyKztvhXZNlk/cKgYcCARCAIxOt8gJvId8wVaJMW2+OEwWTLSED/jXoB4S+yFHBemGn82S7
   #recovery_conf:
     #restore_command: cp ../wal_archive/%f %p
   parameters:

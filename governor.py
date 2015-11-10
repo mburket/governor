@@ -8,6 +8,8 @@ from helpers.ha import Ha
 from helpers.ec2 import Ec2
 from helpers.rt53 import Rt53
 from helpers.sns import Sns
+from helpers.sqs import Sqs
+from helpers.kms import Kms
 
 import syslog
 from socket import gethostname
@@ -23,16 +25,20 @@ f = open(sys.argv[1], "r")
 config = yaml.load(f.read())
 f.close()
 
+# kms is needed to decryot config
+kms = Kms(config["kms"])
 # configure the postgres
-config["postgresql"]["name"] = gethostname().split('.')[0]
+hostname = gethostname()
+config["postgresql"]["name"] = hostname.split('.')[0]
 config["postgresql"]["listen"] = our_ip + ":" + str(config["postgresql"]["port"])
-postgresql = Postgresql(config["postgresql"])
+postgresql = Postgresql(config["postgresql"], kms, hostname)
 
 config["rt53"]["our_ip"] = our_ip
 rt53 = Rt53(config["rt53"])
 etcd = Etcd(config["etcd"])
-sns = Sns(config["sns"])
-ha = Ha(postgresql, etcd, rt53, sns)
+sns = Sns(config["sns"], kms)
+sqs = Sqs(config["sqs"])
+ha = Ha(postgresql, etcd, rt53, sns, sqs, hostname)
 
 # stop postgresql on script exit
 def stop_postgresql():
@@ -75,11 +81,23 @@ else:
     postgresql.start()
 
 while True:
-    syslog.syslog(ha.run_cycle())
+    try:
+        syslog.syslog(str(ha.run_cycle()))
+    except Exception as e:
+        syslog.syslog(str(e))
+        break
 
     # create replication slots
     if postgresql.is_leader():
-        for node in etcd.get_client_path("/members?recursive=true")["node"]["nodes"]:
+        try:
+            nodes = etcd.get_client_path("/members?recursive=true")["node"]["nodes"]
+        except Exception as e:
+            syslog.syslog(str(e))
+            syslog.syslog("Shutting down postgresql!")
+            postgresql.stop()
+            break
+
+        for node in nodes:
             member = node["key"].split('/')[-1]
             if member != postgresql.name:
                 postgresql.query("DO LANGUAGE plpgsql $$DECLARE somevar VARCHAR; BEGIN SELECT slot_name INTO somevar FROM pg_replication_slots WHERE slot_name = '%(slot)s' LIMIT 1; IF NOT FOUND THEN PERFORM pg_create_physical_replication_slot('%(slot)s'); END IF; END$$;" % {"slot": member})

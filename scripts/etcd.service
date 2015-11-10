@@ -6,7 +6,8 @@ Description=Etcd Start Script
 After=syslog.target network.target
 
 [Service]
-ExecStart=/var/lib/pgsql/governor/etcd_runner.py
+ExecStart=/var/lib/pgsql/governor/etcd_runner.py /var/lib/pgsql/governor/postgres.yml
+Nice=-10
 
 [Install]
 WantedBy=multi-user.target

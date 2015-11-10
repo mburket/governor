@@ -5,23 +5,28 @@ from urlparse import urlparse
 
 class Postgresql:
 
-    def __init__(self, config):
+    def __init__(self, config, kms, hostname):
         self.name = config["name"]
         self.host, self.port = config["listen"].split(":")
         self.data_dir = config["data_dir"]
         self.replication = config["replication"]
         self.psql = config["psql"]
+        self.barman = config["barman"]
+        self.hostname = hostname
 
         self.config = config
 
+        self.psql_pwd = kms.decrypt(self.psql["password"])
+        self.replication_pwd = kms.decrypt(self.replication["password"])
+
         self.cursor_holder = None
-        self.connection_string = "postgres://%s:%s@%s:%s/postgres" % (self.replication["username"], self.replication["password"], self.host, self.port)
+        self.connection_string = "postgres://%s:%s@%s:%s/postgres" % (self.replication["username"], self.replication_pwd, self.host, self.port)
 
         self.conn = None
 
     def cursor(self):
         if not self.cursor_holder:
-            self.conn = psycopg2.connect("postgres://%s:%s@%s:%s/postgres" % (self.psql["username"], self.psql["password"], self.host, self.port))
+            self.conn = psycopg2.connect("postgres://%s:%s@%s:%s/postgres" % (self.psql["username"], self.psql_pwd, self.host, self.port))
             self.conn.autocommit = True
             self.cursor_holder = self.conn.cursor()
 
@@ -110,6 +115,9 @@ class Postgresql:
         options = "-c listen_addresses=%s -c port=%s" % (self.host, self.port)
         for setting, value in self.config["parameters"].iteritems():
             options += " -c \"%s=%s\"" % (setting, value)
+
+        # add archive_command to archive to barman
+        options += " -c archive_command=\"/bin/rsync -a %p barman@" + self.barman +  ":/pg_cluster/barman/" + self.hostname + "/incoming/%f\""
         return options
 
     def is_healthy(self):
@@ -180,7 +188,7 @@ recovery_target_timeline = 'latest'
         self.restart()
 
     def create_replication_user(self):
-        self.query("CREATE USER \"%s\" WITH REPLICATION ENCRYPTED PASSWORD '%s';" % (self.replication["username"], self.replication["password"]))
+        self.query("CREATE USER \"%s\" WITH REPLICATION ENCRYPTED PASSWORD '%s';" % (self.replication["username"], self.replication_pwd))
 
     def xlog_position(self):
         return self.query("SELECT pg_last_xlog_replay_location();").fetchone()[0]
